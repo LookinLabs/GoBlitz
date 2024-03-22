@@ -20,6 +20,9 @@ To build and deploy the image to Amazon Elastic Container Registry (ECR), follow
 
     ```shell
     docker build -t <your-image-name> .
+    
+    # EXAMPLE
+    docker build -t go-web-service:v1.0 .
     ```
 
     Replace `<your-image-name>` with the desired name for your Docker image.
@@ -28,6 +31,9 @@ To build and deploy the image to Amazon Elastic Container Registry (ECR), follow
 
     ```shell
     docker tag <your-image-name> <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/<your-repository-name>:<your-tag>
+
+    # EXAMPLE
+    docker tag go-web-service:v1.0 1234567890.dkr.ecr.eu-west-1.amazonaws.com/aws-app-runner:v1.0
     ```
 
     Replace `<your-repository-name>` with the name of your ECR repository, and `<your-tag>` with the desired tag for your Docker image.
@@ -35,7 +41,7 @@ To build and deploy the image to Amazon Elastic Container Registry (ECR), follow
 5. Push the Docker image to ECR by running the following command:
 
     ```shell
-    docker push <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/<your-repository-name>:<your-tag>
+    docker push 1234567890.dkr.ecr.eu-west-1.amazonaws.com/aws-app-runner:v1.0
     ```
 
     Replace `<your-repository-name>` with the name of your ECR repository, and `<your-tag>` with the tag you used in the previous step.
