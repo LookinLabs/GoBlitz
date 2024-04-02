@@ -1,8 +1,10 @@
-package middleware
+package http
 
 import (
 	"net/http"
 	"os"
+
+	http_handlers "web/src/http-handlers"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -11,7 +13,6 @@ import (
 func NewRouter() *gin.Engine {
 	// Set the router as the default one shipped with Gin
 	router := gin.Default()
-
 	// Setup Security Headers
 	router.Use(func(c *gin.Context) {
 		c.Header("X-Frame-Options", "DENY")
@@ -37,5 +38,6 @@ func NewRouter() *gin.Engine {
 		api.GET(os.Getenv("API_PATH"), apiHandler)
 	}
 
+	http_handlers.Handlers(router)
 	return router
 }
