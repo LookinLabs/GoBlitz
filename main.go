@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"web/src/config"
 	http "web/src/http"
 	persistence "web/src/services"
@@ -13,7 +12,7 @@ import (
 func main() {
 	env := config.ConfigureEnvironmentals()
 
-	if os.Getenv("PSQL_ENABLED") == "true" {
+	if env.PSQLEnabled == "true" {
 		db, err := persistence.NewDBConnection()
 		if err != nil {
 			log.Fatalf("Failed to establish database connection: %v", err)

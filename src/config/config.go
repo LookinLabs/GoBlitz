@@ -18,14 +18,20 @@ func ConfigureEnvironmentals() model.Config {
 	appHost := os.Getenv("APP_HOST")
 	apiPath := os.Getenv("API_PATH")
 	forceSSL := os.Getenv("FORCE_SSL")
-	if forceSSL == "" {
+	psqlEnabled := os.Getenv("PSQL_ENABLED")
+
+	switch {
+	case forceSSL == "":
 		forceSSL = "false"
+	case psqlEnabled == "":
+		psqlEnabled = "false"
 	}
 
 	return model.Config{
-		AppPort:  appPort,
-		AppHost:  appHost,
-		APIPath:  apiPath,
-		ForceSSL: forceSSL,
+		AppPort:     appPort,
+		AppHost:     appHost,
+		APIPath:     apiPath,
+		ForceSSL:    forceSSL,
+		PSQLEnabled: psqlEnabled,
 	}
 }
