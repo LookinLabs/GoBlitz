@@ -9,6 +9,7 @@ Feel free to fork the project and use it as a starting point for your next web a
 - [Dependabot](https://github.com/dependabot) - Dependency Management
 - [Gin Gonic](https://github.com/gin-gonic/gin) - Golang Web Framework
 - [Goose](https://github.com/pressly/goose) - Golang Migrations framework
+- [GoDotEnv](https://github.com/joho/godotenv) - Golang .env file parser
 - [Golang CI Lint](https://github.com/golangci/golangci-lint) - Golang Linter
 - [GoSec](https://github.com/securego/gosec) - Golang Security Scan
 - [TailwindCSS](https://tailwindcss.com/docs/installation/play-cdn) - CSS Framework from the CDN
@@ -63,6 +64,12 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 **Note!** Replace `API_PATH` with the actual path of the application. By default it's `/api/v1/`
 
+## Managing environment variables
+
+Environment variables are managed via struct in [envConfig Model](./src/model/envConfig.go). 
+
+You can add new environment variables in the struct and configure the defaults in [envConfig Configuration File](./src/config/envConfig.go).
+
 ## Getting Started
 
 1. Clone the repository
@@ -77,7 +84,7 @@ git clone git@github.com:KostLinux/example-go-web-app.git
 cd example-go-web-app
 ```
 
-3. Configure .env
+3. Configure .env (optional)
 
 ```bash
 cp .env.example .env && nano .env
