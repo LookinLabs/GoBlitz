@@ -35,7 +35,7 @@ func NewRouter(router *gin.Engine, env model.Config) *gin.Engine {
 	routes.StaticRoutes(router)
 
 	// Setup error handlers
-	handlers.Handlers(router, env)
+	handlers.Handlers(router)
 
 	return router
 }
