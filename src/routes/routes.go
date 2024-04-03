@@ -11,6 +11,7 @@ import (
 func APIRoutes(router *gin.Engine, env model.Config) {
 	router.GET(env.APIPath+"/ping", handlers.RootAPIPath)
 	router.GET(env.APIPath+"/users", handlers.GetUserIDHandler)
+	router.GET("/status", handlers.StatusHandler(env))
 }
 
 func StaticRoutes(router *gin.Engine) {

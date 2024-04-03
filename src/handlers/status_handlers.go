@@ -36,7 +36,7 @@ func ReviewServiceStatus(services []model.ServiceInfo) []map[string]string {
 	return statuses
 }
 
-func statusHandler(env model.Config) gin.HandlerFunc {
+func StatusHandler(env model.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		urlPrefix := "http://"
 

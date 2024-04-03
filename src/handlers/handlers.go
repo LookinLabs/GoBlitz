@@ -9,5 +9,4 @@ import (
 func Handlers(router *gin.Engine, env model.Config) {
 	router.Use(ServerErrorHandler())
 	router.NoRoute(NotFoundHandler)
-	router.GET("/status", statusHandler(env))
 }
