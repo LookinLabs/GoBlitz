@@ -2,19 +2,26 @@ package http
 
 import (
 	"net/http"
-	"os"
+	"web/src/config"
+	handlers "web/src/handlers"
 
-	http_handlers "web/src/http-handlers"
-
-	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
 func NewRouter() *gin.Engine {
 	// Set the router as the default one shipped with Gin
 	router := gin.Default()
+	appPort, apiPath, appDomain := config.ConfigureEnvironmentals()
+	router.LoadHTMLGlob("./views/*.html")
+
 	// Setup Security Headers
 	router.Use(func(c *gin.Context) {
+		if c.Request.Host != "localhost:"+appPort && c.Request.Host != appDomain {
+			c.String(http.StatusBadRequest, "Invalid host")
+			c.Abort()
+			return
+		}
+
 		c.Header("X-Frame-Options", "DENY")
 		c.Header("Content-Security-Policy", "default-src 'self'; connect-src *; font-src *; script-src-elem * 'unsafe-inline'; img-src * data:; style-src * 'unsafe-inline';")
 		c.Header("X-XSS-Protection", "1; mode=block")
@@ -24,20 +31,22 @@ func NewRouter() *gin.Engine {
 		c.Next()
 	})
 
-	// Serve frontend static files
-	router.Use(static.Serve("/", static.LocalFile("./public/", true)))
-
 	// Setup route group for the API
-	api := router.Group("/")
+	api := router.Group(apiPath)
 	{
 		apiHandler := func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
 				"message": "Welcome to the API!",
 			})
 		}
-		api.GET(os.Getenv("API_PATH"), apiHandler)
+		api.GET(apiPath, apiHandler)
 	}
 
-	http_handlers.Handlers(router)
+	// Serve frontend static files
+	router.NoRoute(func(c *gin.Context) {
+		c.File("./public" + c.Request.URL.Path)
+	})
+
+	handlers.Handlers(router)
 	return router
 }

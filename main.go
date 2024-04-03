@@ -3,18 +3,13 @@ package main
 import (
 	"log"
 	"os"
+	"web/src/config"
 	http "web/src/http"
 	persistance "web/src/services"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Load .env file
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	appPort, _, _ := config.ConfigureEnvironmentals()
 
 	if os.Getenv("PSQL_ENABLED") == "true" {
 		db, err := persistance.NewDBConnection()
@@ -25,5 +20,5 @@ func main() {
 	}
 
 	router := http.NewRouter()
-	router.Run(":" + os.Getenv("APP_PORT"))
+	router.Run(":" + appPort)
 }

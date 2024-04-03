@@ -1,4 +1,4 @@
-package http_handlers
+package handlers
 
 import (
 	"github.com/gin-gonic/gin"
@@ -19,9 +19,4 @@ func serverErrorHandler() gin.HandlerFunc {
 		}()
 		c.Next()
 	}
-}
-
-func Handlers(router *gin.Engine) {
-	router.Use(serverErrorHandler())
-	router.NoRoute(notFoundHandler)
 }
