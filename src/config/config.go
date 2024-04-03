@@ -3,21 +3,29 @@ package config
 import (
 	"log"
 	"os"
+	"web/src/model"
 
 	"github.com/joho/godotenv"
 )
 
-func ConfigureEnvironmentals() (string, string, string) {
-	// Load .env file
+func ConfigureEnvironmentals() model.Config {
 	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if err != nil && os.Getenv("GO_ENV") == "development" {
+		log.Fatalf("Error loading .env file")
 	}
 
 	appPort := os.Getenv("APP_PORT")
-	appDomain := os.Getenv("APP_DOMAIN")
+	appHost := os.Getenv("APP_HOST")
 	apiPath := os.Getenv("API_PATH")
+	forceSSL := os.Getenv("FORCE_SSL")
+	if forceSSL == "" {
+		forceSSL = "false"
+	}
 
-	return appPort, apiPath, appDomain
-
+	return model.Config{
+		AppPort:  appPort,
+		AppHost:  appHost,
+		APIPath:  apiPath,
+		ForceSSL: forceSSL,
+	}
 }

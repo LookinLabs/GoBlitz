@@ -1,9 +1,13 @@
 package handlers
 
-import "github.com/gin-gonic/gin"
+import (
+	"web/src/model"
 
-func Handlers(router *gin.Engine) {
+	"github.com/gin-gonic/gin"
+)
+
+func Handlers(router *gin.Engine, env model.Config) {
 	router.Use(serverErrorHandler())
 	router.NoRoute(notFoundHandler)
-	router.GET("/status", statusHandler)
+	router.GET("/status", statusHandler(env))
 }

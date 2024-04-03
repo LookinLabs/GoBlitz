@@ -2,22 +2,27 @@ package handlers
 
 import (
 	"net/http"
-	"web/src/config"
 	"web/src/model"
 
 	"github.com/gin-gonic/gin"
 )
 
 func checkServiceStatus(service model.ServiceInfo) map[string]string {
-	_, err := http.Get(service.URL)
+	resp, err := http.Get(service.URL)
 	status := map[string]string{
 		"name": service.Name,
 	}
+
+	if resp != nil {
+		defer resp.Body.Close()
+	}
+
+	status["status"] = "up"
+
 	if err != nil {
 		status["status"] = "down"
-	} else {
-		status["status"] = "up"
 	}
+
 	return status
 }
 
@@ -30,16 +35,23 @@ func ReviewServiceStatus(services []model.ServiceInfo) []map[string]string {
 	return statuses
 }
 
-func statusHandler(c *gin.Context) {
-	apiPort, apiPath, _ := config.ConfigureEnvironmentals()
-	services := []model.ServiceInfo{
-		{Name: "UI", URL: "http://localhost:" + apiPort},
-		{Name: "API", URL: "http://localhost:" + apiPort + apiPath},
+func statusHandler(env model.Config) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		urlPrefix := "http://"
+
+		if env.ForceSSL == "true" {
+			urlPrefix = "https://"
+		}
+
+		services := []model.ServiceInfo{
+			{Name: "UI", URL: urlPrefix + env.AppHost + ":" + env.AppPort},
+			{Name: "API", URL: urlPrefix + env.AppHost + ":" + env.AppPort + env.APIPath},
+		}
+
+		statuses := ReviewServiceStatus(services)
+
+		c.HTML(http.StatusOK, "status.html", gin.H{
+			"services": statuses,
+		})
 	}
-
-	statuses := ReviewServiceStatus(services)
-
-	c.HTML(http.StatusOK, "status.html", gin.H{
-		"services": statuses,
-	})
 }

@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -25,6 +26,6 @@ func NewDBConnection() (*sql.DB, error) {
 		return nil, fmt.Errorf("failed to ping the database: %v", err)
 	}
 
-	fmt.Println("Connected to the PostgreSQL database!")
+	log.Println("Connected to the PostgreSQL database!")
 	return db, nil
 }

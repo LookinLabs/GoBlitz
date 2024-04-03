@@ -12,16 +12,18 @@ import (
 )
 
 func TestReviewServiceStatusWhenAPIDown(tests *testing.T) {
-	apiPort, apiPath, _ := config.ConfigureEnvironmentals()
-
+	env := config.ConfigureEnvironmentals()
 	// Test case for when the API is down
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	httpmock.RegisterResponder("GET", "http://localhost:"+apiPort+apiPath, httpmock.NewErrorResponder(http.ErrServerClosed))
+	urlPrefix := "http://"
+
+	httpmock.RegisterResponder("GET", urlPrefix+env.AppHost+":"+env.AppPort+env.APIPath, httpmock.NewErrorResponder(http.ErrServerClosed))
+
 	services := []model.ServiceInfo{
-		{Name: "UI", URL: "http://localhost:" + apiPort},
-		{Name: "API", URL: "http://localhost:" + apiPort + apiPath},
+		{Name: "UI", URL: urlPrefix + env.AppHost + ":" + env.AppPort},
+		{Name: "API", URL: urlPrefix + env.AppHost + ":" + env.AppPort + env.APIPath},
 	}
 
 	statuses := handlers.ReviewServiceStatus(services)
