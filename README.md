@@ -23,6 +23,7 @@ Feel free to fork the project and use it as a starting point for your next web a
 - Container Compatible
 - Error Handling
 - Comprehensive Go Linting
+- Quick Code Verification Workflow via Github Actions
 
 ## Folder structure
 
