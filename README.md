@@ -26,18 +26,18 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 ## Folder structure
 
-- docs - Documentation for the web application
-- migrations/ - Database migrations for the web application
-- public/ - Static files for the UI
-- public/errors - Error pages served via [Gin Gonic Error Handlers](./src/handlers/error_handlers.go)
-- public/views - HTML templates configured via Gin Gonic Handlers. You can look at example [here](./src/handlers/status_handlers.go)
-- src/config - Configuration for the web application
-- src/handlers - Handlers for the web application, contain error, status, API request and other handlers
-- src/http - HTTP Server Configuration
-- src/models - Models for the web application, contain data structures for the web application
-- src/routes - Routes for the web application, contain all the routes for the web application
-- src/services - External services that the web application uses (like database connections, redis etc)
-- tests/ - GO Unit Tests for the web application
+- `docs` - Documentation for the web application
+- `migrations/` - Database migrations for the web application
+- `public/` - Static files for the UI
+- `public/errors` - Error pages served via [Gin Gonic Error Handlers](./src/handlers/error_handlers.go)
+- `public/views` - HTML templates configured via Gin Gonic Handlers. You can look at example [here](./src/handlers/status_handlers.go)
+- `src/config` - Configuration for the web application
+- `src/handlers` - Handlers for the web application, contain error, status, API request and other handlers
+- `src/http` - HTTP Server Configuration
+- `src/models` - Models for the web application, contain data structures for the web application
+- `src/routes` - Routes for the web application, contain all the routes for the web application
+- `src/services` - External services that the web application uses (like database connections, redis etc)
+- `tests/` - GO Unit Tests for the web application
 
 ## Available Make Commands
 
