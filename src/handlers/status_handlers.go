@@ -13,14 +13,15 @@ func checkServiceStatus(service model.ServiceInfo) map[string]string {
 		"name": service.Name,
 	}
 
-	if resp != nil {
-		defer resp.Body.Close()
-	}
-
-	status["status"] = "up"
-
 	if err != nil {
 		status["status"] = "down"
+	} else {
+		defer resp.Body.Close()
+		if resp.StatusCode == http.StatusOK {
+			status["status"] = "up"
+		} else {
+			status["status"] = "down"
+		}
 	}
 
 	return status
@@ -44,8 +45,8 @@ func statusHandler(env model.Config) gin.HandlerFunc {
 		}
 
 		services := []model.ServiceInfo{
-			{Name: "UI", URL: urlPrefix + env.AppHost + ":" + env.AppPort},
-			{Name: "API", URL: urlPrefix + env.AppHost + ":" + env.AppPort + env.APIPath},
+			{Name: "API", URL: urlPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "ping"},
+			{Name: "Users", URL: urlPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "users"},
 		}
 
 		statuses := ReviewServiceStatus(services)

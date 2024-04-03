@@ -31,10 +31,11 @@ func NewRouter(router *gin.Engine, env model.Config) *gin.Engine {
 		c.Next()
 	})
 
-	// Setup routes
 	routes.APIRoutes(router, env)
 	routes.StaticRoutes(router)
 
+	// Setup error handlers
 	handlers.Handlers(router, env)
+
 	return router
 }

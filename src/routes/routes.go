@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"net/http"
 	"web/src/handlers"
 	model "web/src/model"
 
@@ -14,7 +15,8 @@ func APIRoutes(router *gin.Engine, env model.Config) {
 
 func StaticRoutes(router *gin.Engine) {
 	router.LoadHTMLGlob("./public/views/*.html")
+	router.StaticFS("/public", http.Dir("./public"))
 	router.NoRoute(func(c *gin.Context) {
-		c.File("./public" + c.Request.URL.Path)
+		c.HTML(http.StatusNotFound, "404.html", nil)
 	})
 }
