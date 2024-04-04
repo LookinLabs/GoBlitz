@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func MiddlewareHTTPConfig(c *gin.Context, env model.Config) {
+func MiddlewareHTTPConfig(c *gin.Context, env model.AppConfig) {
 	if env.AppHost == "localhost" {
 		c.Request.Host = "localhost"
 	}

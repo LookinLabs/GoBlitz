@@ -12,7 +12,7 @@ import (
 )
 
 func TestStatusPageWhenAllServicesDown(tests *testing.T) {
-	env := config.ConfigureEnvironmentals()
+	env, _ := config.ConfigureEnvironmentals()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

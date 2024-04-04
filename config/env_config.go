@@ -8,8 +8,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func ConfigureEnvironmentals() model.Config {
-	if err := godotenv.Load(); os.Getenv("GO_ENV") == "development" && err != nil {
+func ConfigureEnvironmentals() (model.AppConfig, model.PostgresConfig) {
+	if err := godotenv.Load(".env"); os.Getenv("GO_ENV") == "development" && err != nil {
 		log.Fatalf("Error loading .env file")
 	}
 
@@ -18,7 +18,7 @@ func ConfigureEnvironmentals() model.Config {
 		urlPrefix = "https://"
 	}
 
-	return model.Config{
+	appConfig := model.AppConfig{
 		AppPort:     getEnv("APP_PORT", "8000"),
 		AppHost:     getEnv("APP_HOST", "localhost"),
 		APIPath:     getEnv("API_PATH", "/api/v1/"),
@@ -26,6 +26,16 @@ func ConfigureEnvironmentals() model.Config {
 		PSQLEnabled: getEnv("PSQL_ENABLED", "false"),
 		URLPrefix:   urlPrefix,
 	}
+
+	postgresConfig := model.PostgresConfig{
+		DBHost:     getEnv("POSTGRES_HOST", "localhost"),
+		DBPort:     getEnv("POSTGRES_PORT", "5432"),
+		DBUser:     getEnv("POSTGRES_USER", "postgres"),
+		DBPassword: getEnv("POSTGRES_PASSWORD", "password"),
+		DBDatabase: getEnv("POSTGRES_DB", "postgres"),
+	}
+
+	return appConfig, postgresConfig
 }
 
 func getEnv(key, defaultValue string) string {

@@ -36,7 +36,7 @@ func ReviewServiceStatus(services []model.ServiceStatusInfo) []map[string]string
 	return statuses
 }
 
-func StatusHandler(env model.Config) gin.HandlerFunc {
+func StatusHandler(env model.AppConfig) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		services := []model.ServiceStatusInfo{
 			{Name: "API", URL: env.URLPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "ping"},

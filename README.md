@@ -17,6 +17,7 @@ Feel free to fork the project and use it as a starting point for your next web a
 ## Features
 
 - Status page at /status
+- Simple Ping API at /api/v1/ping
 - PostgreSQL Connection
 - Security Headers + Host Header Injection Fix
 - Static files serving via public folder
@@ -28,18 +29,20 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 ## Folder structure
 
-- `docs` - Documentation for the web application
+- `config` - Configuration as code (e.g. Environment Variables, Gin Gonic Configuration)
+- `docs` - Web Application documentation
+- `handlers` - Contain the logic for the web application (e.g. API, Error Handling, etc.)
+- `middleware` - Middleware is as HTTP Web Server for API routes, static site serving, etc. 
 - `migrations/` - Database migrations for the web application
+- `models` - Models contain data structures
 - `public/` - Static files for the UI
-- `public/errors` - Error pages served via [Gin Gonic Error Handlers](./src/handlers/error_handlers.go)
-- `public/views` - HTML templates configured via Gin Gonic Handlers. You can look at example [here](./src/handlers/status_handlers.go)
-- `src/config` - Configuration for the web application
-- `src/handlers` - Handlers for the web application, contain error, status, API request and other handlers
-- `src/http` - HTTP Server Configuration
-- `src/models` - Models for the web application, contain data structures for the web application
-- `src/routes` - Routes for the web application, contain all the routes for the web application
-- `src/services` - External services that the web application uses (like database connections, redis etc)
+- `public/errors` - Error pages served by the web application
+- `public/views` - HTML Templates, mostly used for rendering the UI via API
 - `tests/` - GO Unit Tests for the web application
+
+## Architectural Logic
+
+![Architecture](./docs/assets/architecture.png)
 
 ## Available Make Commands
 

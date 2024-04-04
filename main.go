@@ -10,10 +10,10 @@ import (
 )
 
 func main() {
-	env := config.ConfigureEnvironmentals()
+	appEnv, postgresEnv := config.ConfigureEnvironmentals()
 
-	if env.PSQLEnabled == "true" {
-		db, err := repository.NewDBConnection()
+	if appEnv.PSQLEnabled == "true" {
+		db, err := repository.NewDBConnection(postgresEnv)
 		if err != nil {
 			log.Fatalf("Failed to establish database connection: %v", err)
 		}
@@ -21,9 +21,9 @@ func main() {
 	}
 
 	router := gin.Default()
-	httpRouter := middleware.NewRouter(router, env)
+	httpRouter := middleware.NewRouter(router, appEnv)
 
-	err := httpRouter.Run(":" + env.AppPort)
+	err := httpRouter.Run(":" + appEnv.AppPort)
 	if err != nil {
 		log.Printf("Failed to start the server: %v", err)
 	}
