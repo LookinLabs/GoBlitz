@@ -41,7 +41,6 @@ Feel free to fork the project and use it as a starting point for your next web a
 - `tests/` - GO Unit Tests for the web application
 
 ## Architectural Logic
-
 ![Architecture](./docs/assets/architecture.png)
 
 ## Available Make Commands
