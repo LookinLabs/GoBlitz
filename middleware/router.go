@@ -3,6 +3,7 @@ package middleware
 import (
 	"net/http"
 	"web/config"
+	"web/handlers"
 	"web/model"
 
 	"github.com/gin-contrib/static"
@@ -22,8 +23,8 @@ func NewRouter(router *gin.Engine, env model.Config) *gin.Engine {
 	router.Use(static.Serve("/", static.LocalFile("./public/", true)))
 
 	// API Routes
-	router.GET(env.APIPath+"/ping", MainAPIHandler)
-	router.GET("/status", StatusHandler(env), func(c *gin.Context) {
+	router.GET(env.APIPath+"/ping", handlers.MainAPIHandler)
+	router.GET("/status", handlers.StatusHandler(env), func(c *gin.Context) {
 		statuses := c.MustGet("statuses").([]map[string]string)
 		c.HTML(http.StatusOK, "status.html", gin.H{
 			"services": statuses,
@@ -34,8 +35,8 @@ func NewRouter(router *gin.Engine, env model.Config) *gin.Engine {
 	router.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusNotFound, "public/error/404.html", nil)
 	})
-	router.Use(ServerErrorHandler())
-	router.NoRoute(NotFoundHandler)
+	router.Use(handlers.ServerErrorHandler())
+	router.NoRoute(handlers.NotFoundHandler)
 
 	return router
 }

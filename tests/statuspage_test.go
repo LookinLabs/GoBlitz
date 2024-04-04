@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 	"web/config"
-	"web/middleware"
+	"web/handlers"
 	"web/model"
 
 	"github.com/jarcoal/httpmock"
@@ -29,7 +29,7 @@ func TestStatusPageWhenAllServicesDown(tests *testing.T) {
 		httpmock.RegisterResponder("GET", service.URL, httpmock.NewErrorResponder(http.ErrServerClosed))
 	}
 
-	statuses := middleware.ReviewServiceStatus(services)
+	statuses := handlers.ReviewServiceStatus(services)
 
 	// Check the status of all services
 	for i, service := range services {

@@ -3,7 +3,6 @@ module web
 go 1.22.1
 
 require (
-	github.com/go-playground/assert/v2 v2.2.0
 	github.com/jarcoal/httpmock v1.3.1
 	github.com/stretchr/testify v1.9.0
 )
