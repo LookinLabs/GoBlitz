@@ -1,6 +1,6 @@
 package model
 
-type ServiceInfo struct {
+type ServiceStatusInfo struct {
 	Name string
 	URL  string
 }

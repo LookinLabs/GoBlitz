@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
-	"web/src/config"
-	http "web/src/http"
-	persistence "web/src/services"
+	"web/config"
+	"web/middleware"
+	"web/repository"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +13,7 @@ func main() {
 	env := config.ConfigureEnvironmentals()
 
 	if env.PSQLEnabled == "true" {
-		db, err := persistence.NewDBConnection()
+		db, err := repository.NewDBConnection()
 		if err != nil {
 			log.Fatalf("Failed to establish database connection: %v", err)
 		}
@@ -21,7 +21,7 @@ func main() {
 	}
 
 	router := gin.Default()
-	httpRouter := http.NewRouter(router, env)
+	httpRouter := middleware.NewRouter(router, env)
 
 	err := httpRouter.Run(":" + env.AppPort)
 	if err != nil {

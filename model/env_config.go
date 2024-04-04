@@ -6,4 +6,5 @@ type Config struct {
 	AppHost     string
 	ForceSSL    string
 	PSQLEnabled string
+	URLPrefix   string
 }

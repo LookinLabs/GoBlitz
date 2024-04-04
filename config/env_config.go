@@ -3,15 +3,19 @@ package config
 import (
 	"log"
 	"os"
-	"web/src/model"
+	"web/model"
 
 	"github.com/joho/godotenv"
 )
 
 func ConfigureEnvironmentals() model.Config {
-	err := godotenv.Load()
-	if err != nil && os.Getenv("GO_ENV") == "development" {
+	if err := godotenv.Load(); os.Getenv("GO_ENV") == "development" && err != nil {
 		log.Fatalf("Error loading .env file")
+	}
+
+	urlPrefix := "http://"
+	if os.Getenv("ForceSSL") == "true" {
+		urlPrefix = "https://"
 	}
 
 	return model.Config{
@@ -20,6 +24,7 @@ func ConfigureEnvironmentals() model.Config {
 		APIPath:     getEnv("API_PATH", "/api/v1/"),
 		ForceSSL:    getEnv("FORCE_SSL", "false"),
 		PSQLEnabled: getEnv("PSQL_ENABLED", "false"),
+		URLPrefix:   urlPrefix,
 	}
 }
 

@@ -1,4 +1,4 @@
-package handlers
+package middleware
 
 import (
 	"io"
@@ -12,7 +12,11 @@ import (
 // Show 404 Not Found error page
 func NotFoundHandler(c *gin.Context) {
 	c.Status(http.StatusNotFound)
-	file, _ := os.Open("./public/error/404.html")
+	file, err := os.Open("./public/error/404.html")
+	if err != nil {
+		log.Printf("Error opening file: %v", err)
+		return
+	}
 	defer file.Close()
 	if _, err := io.Copy(c.Writer, file); err != nil {
 		if err := c.Error(err); err != nil {
@@ -27,7 +31,11 @@ func ServerErrorHandler() gin.HandlerFunc {
 		defer func() {
 			if request := recover(); request != nil {
 				c.Status(http.StatusBadGateway)
-				file, _ := os.Open("./public/error/502.html")
+				file, err := os.Open("./public/error/502.html")
+				if err != nil {
+					log.Printf("Error opening file: %v", err)
+					return
+				}
 				defer file.Close()
 				if _, err := io.Copy(c.Writer, file); err != nil {
 					if err := c.Error(err); err != nil {

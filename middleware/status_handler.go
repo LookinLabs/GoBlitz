@@ -1,13 +1,13 @@
-package handlers
+package middleware
 
 import (
 	"net/http"
-	"web/src/model"
+	"web/model"
 
 	"github.com/gin-gonic/gin"
 )
 
-func checkServiceStatus(service model.ServiceInfo) map[string]string {
+func checkServiceStatus(service model.ServiceStatusInfo) map[string]string {
 	resp, err := http.Get(service.URL)
 	status := map[string]string{
 		"name": service.Name,
@@ -27,7 +27,7 @@ func checkServiceStatus(service model.ServiceInfo) map[string]string {
 	return status
 }
 
-func ReviewServiceStatus(services []model.ServiceInfo) []map[string]string {
+func ReviewServiceStatus(services []model.ServiceStatusInfo) []map[string]string {
 	statuses := make([]map[string]string, 0)
 	for _, service := range services {
 		status := checkServiceStatus(service)
@@ -38,21 +38,13 @@ func ReviewServiceStatus(services []model.ServiceInfo) []map[string]string {
 
 func StatusHandler(env model.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		urlPrefix := "http://"
-
-		if env.ForceSSL == "true" {
-			urlPrefix = "https://"
-		}
-
-		services := []model.ServiceInfo{
-			{Name: "API", URL: urlPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "ping"},
-			{Name: "Users", URL: urlPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "users"},
+		services := []model.ServiceStatusInfo{
+			{Name: "API", URL: env.URLPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "ping"},
 		}
 
 		statuses := ReviewServiceStatus(services)
 
-		c.HTML(http.StatusOK, "status.html", gin.H{
-			"services": statuses,
-		})
+		c.Set("statuses", statuses)
+		c.Next()
 	}
 }
