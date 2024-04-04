@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Status Page</title>
+    <link rel="stylesheet" href="/public/views/css/status.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-4 text-center">Status Page</h1>
+        {{range .services}}
+        <div class="service bg-white shadow rounded-lg p-4 mb-4 flex justify-between items-center">
+            <h2 class="text-xl font-bold mb-2">{{.name}}</h2>
+            {{if eq .status "up"}}
+            <div class="status text-green-500">
+                <span>&#10003;</span>
+            </div>
+            {{else}}
+            <div class="status text-red-500">
+                <span>&#10007;</span>
+            </div>
+            {{end}}
+        </div>
+        {{end}}
+    </div>
+</body>
+</html>

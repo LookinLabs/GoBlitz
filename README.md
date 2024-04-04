@@ -1,62 +1,105 @@
-# Example Go Web service
+# Go Web App Skeleton
 
-Example Go Web Service that serves static files and exposes a simple API path.
+Go Web App Skeleton is a boilerplate for building web applications in Golang. It is built using the Gin Gonic framework and PostgreSQL as the database. It also includes a Dockerfile for containerization. The project is structured in a way that it is easy to add new features and scale the application.
 
-## Build and Deploy
+Feel free to fork the project and use it as a starting point for your next web application.
 
-To build and deploy the image to Amazon Elastic Container Registry (ECR), follow these steps:
+## Technologies used
 
-1. Install the AWS Command Line Interface (CLI) if you haven't already.
+- [Dependabot](https://github.com/dependabot) - Dependency Management
+- [Gin Gonic](https://github.com/gin-gonic/gin) - Golang Web Framework
+- [Goose](https://github.com/pressly/goose) - Golang Migrations framework
+- [GoDotEnv](https://github.com/joho/godotenv) - Golang .env file parser
+- [Golang CI Lint](https://github.com/golangci/golangci-lint) - Golang Linter
+- [GoSec](https://github.com/securego/gosec) - Golang Security Scan
+- [TailwindCSS](https://tailwindcss.com/docs/installation/play-cdn) - CSS Framework from the CDN
 
-2. Configure environmentals
+## Features
 
-    ```shell
-    cp .env.example .env
-    vim .env
-    ```
+- Status page at /status
+- PostgreSQL Connection
+- Security Headers + Host Header Injection Fix
+- Static files serving via public folder
+- HTML Templates
+- Container Compatible
+- Error Handling
+- Comprehensive Go Linting
+- Quick Code Verification Workflow via Github Actions
 
-3. Load environment variables
+## Folder structure
 
-    ```shell
-    source .env
-    ```
+- `docs` - Documentation for the web application
+- `migrations/` - Database migrations for the web application
+- `public/` - Static files for the UI
+- `public/errors` - Error pages served via [Gin Gonic Error Handlers](./src/handlers/error_handlers.go)
+- `public/views` - HTML templates configured via Gin Gonic Handlers. You can look at example [here](./src/handlers/status_handlers.go)
+- `src/config` - Configuration for the web application
+- `src/handlers` - Handlers for the web application, contain error, status, API request and other handlers
+- `src/http` - HTTP Server Configuration
+- `src/models` - Models for the web application, contain data structures for the web application
+- `src/routes` - Routes for the web application, contain all the routes for the web application
+- `src/services` - External services that the web application uses (like database connections, redis etc)
+- `tests/` - GO Unit Tests for the web application
 
-4. Authenticate the Docker CLI to your ECR registry by running the following command:
+## Available Make Commands
 
-    ```shell
-    aws ecr get-login-password --region <your-region> | docker login --username AWS --password-stdin <your-account-id>.dkr.ecr.<your-region>.amazonaws.com
-    ```
+- `make build` - Build the application
+- `make run` - Run the application
+- `make test` - Run the tests
+- `make fumpt` - Run the go fmt
+- `make linter` - Run the comprehensive [GolangCILint](.golangci.yml) to check the code quality
+- `make gosec` - Run the GoSec to check code for vulnerabilities
+- `make mod-vendor` - Vendor the dependencies
+- `make validate` - Runs `make linter`, `make test` and `make gosec` to validate the code
+- `make migrate-create MIGRATION_NAME` - Create a new migration
+- `make migrate-up` - Run the migrations
+- `make migrate-down` - Rollback the migrations
 
-    Replace `<your-region>` with the AWS region where your ECR registry is located, and `<your-account-id>` with your AWS account ID.
+## Available Paths
 
-5. Build the Docker image by running the following command:
+- `/` - Home page
+- `/status` - Status page
+- `API_PATH/ping` - API check endpoint
+- `API_PATH/users` - Sample Users API endpoint
 
-    ```shell
-    docker build -t <your-image-name> .
-    
-    # EXAMPLE
-    docker build -t go-web-service:v1.0 .
-    ```
+**Note!** Replace `API_PATH` with the actual path of the application. By default it's `/api/v1/`
 
-    Replace `<your-image-name>` with the desired name for your Docker image.
+## Managing environment variables
 
-6. Tag the Docker image with the ECR repository URI by running the following command:
+Environment variables are managed via struct in [envConfig Model](./src/model/envConfig.go). 
 
-    ```shell
-    docker tag <your-image-name> <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/<your-repository-name>:<your-tag>
+You can add new environment variables in the struct and configure the defaults in [envConfig Configuration File](./src/config/envConfig.go).
 
-    # EXAMPLE
-    docker tag go-web-service:v1.0 1234567890.dkr.ecr.eu-west-1.amazonaws.com/aws-app-runner:v1.0
-    ```
+## Getting Started
 
-    Replace `<your-repository-name>` with the name of your ECR repository, and `<your-tag>` with the desired tag for your Docker image.
+1. Clone the repository
 
-7. Push the Docker image to ECR by running the following command:
+```bash
+git clone git@github.com:KostLinux/example-go-web-app.git
+```
 
-    ```shell
-    docker push 1234567890.dkr.ecr.eu-west-1.amazonaws.com/aws-app-runner:v1.0
-    ```
+2. Change the directory
 
-    Replace `<your-repository-name>` with the name of your ECR repository, and `<your-tag>` with the tag you used in the previous step.
+```bash
+cd example-go-web-app
+```
 
-8. Your Docker image is now available in ECR and can be used for deployment.
+3. Configure .env (optional)
+
+```bash
+cp .env.example .env && nano .env
+```
+
+4. Run the application
+
+```bash
+make run || go run main.go
+```
+
+5. Visit the application in your browser
+
+Feel free to visit the application at localhost:8000 and move around available paths
+
+## Contribution
+
+Feel free to contribute to the project by creating a pull request. Make sure to follow the [Contribution Guidelines](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
