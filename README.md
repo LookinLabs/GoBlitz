@@ -388,6 +388,169 @@ Percentage of the requests served within a certain time (ms)
  100%   5711 (longest request)
 ```
 
+### Node Express
+
+1. 100 requests and 10 concurrenct connections
+
+```
+ab -n 100 -c 10 -k http://localhost:3000/
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            3000
+
+Document Path:          /
+Document Length:        139 bytes
+
+Concurrency Level:      10
+Time taken for tests:   0.055 seconds
+Complete requests:      100
+Failed requests:        0
+Non-2xx responses:      100
+Keep-Alive requests:    100
+Total transferred:      41100 bytes
+HTML transferred:       13900 bytes
+Requests per second:    1822.95 [#/sec] (mean)
+Time per request:       5.486 [ms] (mean)
+Time per request:       0.549 [ms] (mean, across all concurrent requests)
+Transfer rate:          731.67 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       1
+Processing:     1    4   6.7      2      34
+Waiting:        1    4   6.7      2      34
+Total:          1    4   6.8      2      34
+
+Percentage of the requests served within a certain time (ms)
+  50%      2
+  66%      2
+  75%      4
+  80%      4
+  90%     10
+  95%     27
+  98%     32
+  99%     34
+ 100%     34 (longest request)
+```
+
+2. 100 requests and 100 concurrenct connections
+
+```
+ab -n 100 -c 100 -k http://localhost:3000/
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            3000
+
+Document Path:          /
+Document Length:        139 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.038 seconds
+Complete requests:      100
+Failed requests:        0
+Non-2xx responses:      100
+Keep-Alive requests:    100
+Total transferred:      41100 bytes
+HTML transferred:       13900 bytes
+Requests per second:    2624.81 [#/sec] (mean)
+Time per request:       38.098 [ms] (mean)
+Time per request:       0.381 [ms] (mean, across all concurrent requests)
+Transfer rate:          1053.51 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    7   1.6      7       8
+Processing:     7   13   5.4     12      24
+Waiting:        2   13   5.5     12      24
+Total:          7   20   6.4     20      31
+
+Percentage of the requests served within a certain time (ms)
+  50%     20
+  66%     23
+  75%     26
+  80%     26
+  90%     29
+  95%     30
+  98%     31
+  99%     31
+ 100%     31 (longest request)
+```
+
+3. 1000 requests and 100 concurrenct connections
+
+```
+ab -n 1000 -c 100 -k http://localhost:3000/
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            3000
+
+Document Path:          /
+Document Length:        139 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.139 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Keep-Alive requests:    1000
+Total transferred:      411000 bytes
+HTML transferred:       139000 bytes
+Requests per second:    7208.77 [#/sec] (mean)
+Time per request:       13.872 [ms] (mean)
+Time per request:       0.139 [ms] (mean, across all concurrent requests)
+Transfer rate:          2893.36 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   1.5      0       6
+Processing:     1   12  27.9      5     127
+Waiting:        1   12  27.9      5     126
+Total:          1   13  29.2      5     131
+
+Percentage of the requests served within a certain time (ms)
+  50%      5
+  66%      5
+  75%      5
+  80%      6
+  90%     10
+  95%    127
+  98%    129
+  99%    131
+ 100%    131 (longest request)
+```
+
 ## Available Make Commands
 
 - `make build` - Build the application
