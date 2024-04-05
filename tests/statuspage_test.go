@@ -4,20 +4,20 @@ import (
 	"net/http"
 	"testing"
 	"web/config"
-	"web/handlers"
-	"web/model"
+	templatesModel "web/model/templates"
+	templates "web/templates"
 
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestStatusPageWhenAllServicesDown(tests *testing.T) {
-	env, _ := config.ConfigureEnvironmentals()
+	env, _ := config.LoadEnvironmentals()
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	services := []model.ServiceStatusInfo{
+	services := []templatesModel.ServiceStatusInfo{
 		{
 			Name: "API",
 			URL:  env.URLPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "ping",
@@ -29,7 +29,7 @@ func TestStatusPageWhenAllServicesDown(tests *testing.T) {
 		httpmock.RegisterResponder("GET", service.URL, httpmock.NewErrorResponder(http.ErrServerClosed))
 	}
 
-	statuses := handlers.ReviewServiceStatus(services)
+	statuses := templates.CheckServicesStatus(services)
 
 	// Check the status of all services
 	for i, service := range services {

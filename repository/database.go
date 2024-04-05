@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"web/model"
+	envModel "web/model/config"
 )
 
-func NewDBConnection(env model.PostgresConfig) (*sql.DB, error) {
+func NewDBConnection(env envModel.PostgresEnv) (*sql.DB, error) {
 	connStr := "postgres://" + env.DBUser + ":" + env.DBPassword + "@" + env.DBHost + ":" + env.DBPort + "/" + env.DBDatabase + "?sslmode=disable"
 
 	db, err := sql.Open("postgres", connStr)

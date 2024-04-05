@@ -1,6 +1,6 @@
-package model
+package envmodel
 
-type AppConfig struct {
+type AppEnv struct {
 	AppPort     string
 	APIPath     string
 	AppHost     string
@@ -9,7 +9,7 @@ type AppConfig struct {
 	URLPrefix   string
 }
 
-type PostgresConfig struct {
+type PostgresEnv struct {
 	DBHost     string
 	DBPort     string
 	DBUser     string

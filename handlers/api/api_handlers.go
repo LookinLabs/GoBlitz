@@ -1,4 +1,4 @@
-package handlers
+package apihandler
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func PingAPIHandler(c *gin.Context) {
+func StatusOkPingResponse(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Pong!",
 	})

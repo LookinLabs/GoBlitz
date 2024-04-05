@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	appEnv, postgresEnv := config.ConfigureEnvironmentals()
+	appEnv, postgresEnv := config.LoadEnvironmentals()
 
 	if appEnv.PSQLEnabled == "true" {
 		db, err := repository.NewDBConnection(postgresEnv)

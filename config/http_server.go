@@ -2,12 +2,12 @@ package config
 
 import (
 	"net/http"
-	"web/model"
+	envModel "web/model/config"
 
 	"github.com/gin-gonic/gin"
 )
 
-func MiddlewareHTTPConfig(c *gin.Context, env model.AppConfig) {
+func MiddlewareHTTPConfig(c *gin.Context, env envModel.AppEnv) {
 	if env.AppHost == "localhost" {
 		c.Request.Host = "localhost"
 	}

@@ -1,4 +1,4 @@
-package handlers
+package errorhandler
 
 import (
 	"io"
@@ -10,7 +10,7 @@ import (
 )
 
 // Show 404 Not Found error page
-func NotFoundHandler(c *gin.Context) {
+func StatusNotFound(c *gin.Context) {
 	c.Status(http.StatusNotFound)
 	file, err := os.Open("./public/error/404.html")
 	if err != nil {
@@ -26,7 +26,7 @@ func NotFoundHandler(c *gin.Context) {
 }
 
 // Show 502 Bad Gateway error page
-func ServerErrorHandler() gin.HandlerFunc {
+func StatusBadGateway() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if request := recover(); request != nil {
