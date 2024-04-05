@@ -227,116 +227,114 @@ Percentage of the requests served within a certain time (ms)
  100%     12 (longest request)
 ```
 
-### Laravel (default)
+### Laravel 11 (default)
 
 1. 100 requests and 10 concurrenct connections
 
 ```
-ab -n 100 -c 10 -k http://localhost:80/api/v1/ping
+ab -n 100 -c 10 -k http://127.0.0.1:8000/api/v1/ping
 This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
 
-Benchmarking localhost (be patient).....done
+Benchmarking 127.0.0.1 (be patient).....done
 
 
-Server Software:        nginx
-Server Hostname:        localhost
-Server Port:            80
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8000
 
 Document Path:          /api/v1/ping
-Document Length:        33822 bytes
+Document Length:        18 bytes
 
 Concurrency Level:      10
-Time taken for tests:   6.029 seconds
+Time taken for tests:   0.754 seconds
 Complete requests:      100
 Failed requests:        0
 Keep-Alive requests:    0
-Total transferred:      3494800 bytes
-HTML transferred:       3382200 bytes
-Requests per second:    16.59 [#/sec] (mean)
-Time per request:       602.927 [ms] (mean)
-Time per request:       60.293 [ms] (mean, across all concurrent requests)
-Transfer rate:          566.05 [Kbytes/sec] received
+Total transferred:      117500 bytes
+HTML transferred:       1800 bytes
+Requests per second:    132.58 [#/sec] (mean)
+Time per request:       75.425 [ms] (mean)
+Time per request:       7.543 [ms] (mean, across all concurrent requests)
+Transfer rate:          152.13 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
 Connect:        0    0   0.1      0       1
-Processing:   219  557 100.1    546     836
-Waiting:      218  556 100.2    546     835
-Total:        219  557 100.1    547     836
+Processing:     9   70  14.9     72      91
+Waiting:        9   70  14.9     72      91
+Total:          9   70  14.9     72      91
 
 Percentage of the requests served within a certain time (ms)
-  50%    547
-  66%    572
-  75%    580
-  80%    617
-  90%    674
-  95%    750
-  98%    807
-  99%    836
- 100%    836 (longest request)
+  50%     72
+  66%     77
+  75%     81
+  80%     82
+  90%     87
+  95%     89
+  98%     90
+  99%     91
+ 100%     91 (longest request)
 ```
 2. 100 requests and 100 concurrenct connections
 
 ```
-ab -n 100 -c 100 -k http://localhost:80/api/v1/ping
+ab -n 100 -c 100 -k http://127.0.0.1:8000/api/v1/ping
 This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
 
-Benchmarking localhost (be patient).....done
+Benchmarking 127.0.0.1 (be patient).....done
 
 
-Server Software:        nginx
-Server Hostname:        localhost
-Server Port:            80
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8000
 
 Document Path:          /api/v1/ping
-Document Length:        33822 bytes
+Document Length:        18 bytes
 
 Concurrency Level:      100
-Time taken for tests:   5.932 seconds
+Time taken for tests:   0.773 seconds
 Complete requests:      100
 Failed requests:        0
 Keep-Alive requests:    0
-Total transferred:      3494800 bytes
-HTML transferred:       3382200 bytes
-Requests per second:    16.86 [#/sec] (mean)
-Time per request:       5932.158 [ms] (mean)
-Time per request:       59.322 [ms] (mean, across all concurrent requests)
-Transfer rate:          575.32 [Kbytes/sec] received
+Total transferred:      117500 bytes
+HTML transferred:       1800 bytes
+Requests per second:    129.33 [#/sec] (mean)
+Time per request:       773.239 [ms] (mean)
+Time per request:       7.732 [ms] (mean, across all concurrent requests)
+Transfer rate:          148.40 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        1    3   0.6      4       4
-Processing:   229 3007 1586.7   2938    5651
-Waiting:      229 3006 1586.7   2938    5650
-Total:        232 3010 1587.2   2942    5655
-WARNING: The median and mean for the initial connection time are not within a normal deviation
-        These results are probably not that reliable.
+Connect:        0    3   0.4      3       4
+Processing:    12  378 220.1    377     755
+Waiting:       11  378 220.2    377     755
+Total:         15  381 220.1    379     758
 
 Percentage of the requests served within a certain time (ms)
-  50%   2942
-  66%   3986
-  75%   4279
-  80%   4534
-  90%   5061
-  95%   5422
-  98%   5654
-  99%   5655
- 100%   5655 (longest request)
+  50%    379
+  66%    503
+  75%    579
+  80%    616
+  90%    689
+  95%    728
+  98%    748
+  99%    758
+ 100%    758 (longest request)
 ```
 
 3. 1000 requests and 100 concurrenct connections
 
 ```
-ab -n 1000 -c 100 -k http://localhost:80/api/v1/ping
+ab -n 1000 -c 100 -k http://127.0.0.1:8000/api/v1/ping
 This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
 
-Benchmarking localhost (be patient)
+Benchmarking 127.0.0.1 (be patient)
 Completed 100 requests
 Completed 200 requests
 Completed 300 requests
@@ -350,42 +348,42 @@ Completed 1000 requests
 Finished 1000 requests
 
 
-Server Software:        nginx
-Server Hostname:        localhost
-Server Port:            80
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8000
 
 Document Path:          /api/v1/ping
-Document Length:        33822 bytes
+Document Length:        18 bytes
 
 Concurrency Level:      100
-Time taken for tests:   53.601 seconds
+Time taken for tests:   7.624 seconds
 Complete requests:      1000
 Failed requests:        0
 Keep-Alive requests:    0
-Total transferred:      34948000 bytes
-HTML transferred:       33822000 bytes
-Requests per second:    18.66 [#/sec] (mean)
-Time per request:       5360.134 [ms] (mean)
-Time per request:       53.601 [ms] (mean, across all concurrent requests)
-Transfer rate:          636.72 [Kbytes/sec] received
+Total transferred:      1175000 bytes
+HTML transferred:       18000 bytes
+Requests per second:    131.17 [#/sec] (mean)
+Time per request:       762.389 [ms] (mean)
+Time per request:       7.624 [ms] (mean, across all concurrent requests)
+Transfer rate:          150.51 [Kbytes/sec] received
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    0   0.8      0       4
-Processing:   218 5083 877.5   5315    5709
-Waiting:      217 5080 877.2   5314    5709
-Total:        222 5083 876.8   5315    5711
+Connect:        0    0   0.8      0       3
+Processing:    10  718 148.4    774     851
+Waiting:       10  718 148.4    774     851
+Total:         14  718 147.8    775     851
 
 Percentage of the requests served within a certain time (ms)
-  50%   5315
-  66%   5343
-  75%   5383
-  80%   5412
-  90%   5451
-  95%   5459
-  98%   5474
-  99%   5512
- 100%   5711 (longest request)
+  50%    775
+  66%    789
+  75%    799
+  80%    806
+  90%    819
+  95%    832
+  98%    843
+  99%    847
+ 100%    851 (longest request)
 ```
 
 ### Node Express
