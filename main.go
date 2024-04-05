@@ -2,18 +2,19 @@ package main
 
 import (
 	"log"
-	"web/src/config"
-	http "web/src/http"
-	persistence "web/src/services"
+	"web/config"
+	"web/middleware"
+	"web/repository"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 func main() {
-	env := config.ConfigureEnvironmentals()
+	appEnv, postgresEnv := config.LoadEnvironmentals()
 
-	if env.PSQLEnabled == "true" {
-		db, err := persistence.NewDBConnection()
+	if appEnv.PSQLEnabled == "true" {
+		db, err := repository.NewDBConnection(postgresEnv)
 		if err != nil {
 			log.Fatalf("Failed to establish database connection: %v", err)
 		}
@@ -21,9 +22,9 @@ func main() {
 	}
 
 	router := gin.Default()
-	httpRouter := http.NewRouter(router, env)
+	httpRouter := middleware.NewRouter(router, appEnv)
 
-	err := httpRouter.Run(":" + env.AppPort)
+	err := httpRouter.Run(":" + appEnv.AppPort)
 	if err != nil {
 		log.Printf("Failed to start the server: %v", err)
 	}

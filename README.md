@@ -1,6 +1,10 @@
 # Go Web App Skeleton
 
-Go Web App Skeleton is a boilerplate for building web applications in Golang. It is built using the Gin Gonic framework and PostgreSQL as the database. It also includes a Dockerfile for containerization. The project is structured in a way that it is easy to add new features and scale the application.
+> :warning: **NOTE:** This project is currently under development and does not have a stable version yet. Please use with caution.
+
+The Go Web App Skeleton is a boilerplate for building web applications in Golang, designed to mainly run on containers but can also be set up in a VM. The project is structured in a way that makes it easy to add new business logic features. Its architecture is similar to layered architecture with some MVC components meshed in.
+
+Web application built on top of the Gin Gonic framework are very fast and efficient. You can look for benchmarks [here](#benchmarks).
 
 Feel free to fork the project and use it as a starting point for your next web application.
 
@@ -16,30 +20,540 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 ## Features
 
+- Simple Ping API at /api/v1/ping
 - Status page at /status
 - PostgreSQL Connection
-- Security Headers + Host Header Injection Fix
-- Static files serving via public folder
+- Security Headers
+- SSRF protection via Host Header Validation
+- Static site serving at root path (/)
 - HTML Templates
-- Container Compatible
 - Error Handling
-- Comprehensive Go Linting
+- Container Compatible
+- Comprehensive and quite strict quality scan
 - Quick Code Verification Workflow via Github Actions
 
 ## Folder structure
 
-- `docs` - Documentation for the web application
+- `config` - Custom component. Configuration as code (e.g. Environment Variables, Gin Gonic Configuration)
+- `docs` - Web Application documentation
+- `handlers` - Controller component (in MVC architecture) folder. Contain the logic for the web application (e.g. API, Error Handling, etc.)
+- `handlers/api` - API request and response handling
+- `handlers/error` - Error handling
+- `middleware` - Middleware layer (in layered architecture) used as HTTP Web Server for API routes, static site serving, etc. 
 - `migrations/` - Database migrations for the web application
-- `public/` - Static files for the UI
-- `public/errors` - Error pages served via [Gin Gonic Error Handlers](./src/handlers/error_handlers.go)
-- `public/views` - HTML templates configured via Gin Gonic Handlers. You can look at example [here](./src/handlers/status_handlers.go)
-- `src/config` - Configuration for the web application
-- `src/handlers` - Handlers for the web application, contain error, status, API request and other handlers
-- `src/http` - HTTP Server Configuration
-- `src/models` - Models for the web application, contain data structures for the web application
-- `src/routes` - Routes for the web application, contain all the routes for the web application
-- `src/services` - External services that the web application uses (like database connections, redis etc)
-- `tests/` - GO Unit Tests for the web application
+- `model` - Model component (in MVC architecture) folder which contain data structures where data is handled.
+- `model/config` - Configuration data structures
+- `model/templates` - HTML Templates data structures
+- `public` - View component (in MVC architecture) folder used to store static website.
+- `public/errors` - Error pages served by the web application
+- `public/views` - HTML Templates, mostly used for rendering the UI via API
+- `repository`- Repository is a layer (in layered architecture) that connects the application to external services like databases, cache servers, etc.
+- `templates` - HTML Template value generation to handle them in `public/views` folder
+- `tests` - GO Unit Tests for the web application
+
+## Architecture
+
+The architecture of the web application is layered, with some MVC and custom components integrated.
+
+The middleware layer handles routing and serves the static site from the `public` folder. It interacts with the handler layer to process requests from clients and generate appropriate responses.
+
+The repository layer manages connections to external services such as databases and cache servers. It utilizes environment variables from the model component to establish connections with these external services.
+
+The `handler` component plays a crucial role in processing requests received from the middleware layer. It enriches these requests with necessary data for generating responses, using the model component in conjunction with the repository layer. Additionally, it manages errors and sends appropriate responses back to the middleware layer.
+
+The `model` component contains data structures for config, templates, repository, middleware, and handler components.
+
+The `config` component facilitates configuring the application through code. It stores configuration settings for the repository, middleware, and handler components. The config component is combined with the model to establish data structures that promote code reusability across all layers and components.
+
+The `templates` component generates values for the HTML templates located in `public/views/` folder.
+
+![Architecture](./docs/assets/architecture.png)
+
+## Benchmarks
+
+Benchmarks are done via ApacheBench. We're comparing here the performance of default web application written via Go and Laravel against /api/v1/ping endpoint which contains only JSON message: `{"message": "pong"}`.
+
+### Go Web App Skeleton (Built on Gin-Gonic)
+
+1. 100 requests and 10 concurrenct connections
+
+```
+ab -n 100 -c 10 -k http://localhost:8000/api/v1/ping
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8000
+
+Document Path:          /api/v1/ping
+Document Length:        571 bytes
+
+Concurrency Level:      10
+Time taken for tests:   0.012 seconds
+Complete requests:      100
+Failed requests:        0
+Keep-Alive requests:    100
+Total transferred:      123300 bytes
+HTML transferred:       57100 bytes
+Requests per second:    8602.15 [#/sec] (mean)
+Time per request:       1.162 [ms] (mean)
+Time per request:       0.116 [ms] (mean, across all concurrent requests)
+Transfer rate:          10357.86 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       0
+Processing:     1    1   0.3      1       3
+Waiting:        1    1   0.3      1       2
+Total:          1    1   0.4      1       3
+
+Percentage of the requests served within a certain time (ms)
+  50%      1
+  66%      1
+  75%      1
+  80%      1
+  90%      1
+  95%      1
+  98%      2
+  99%      3
+ 100%      3 (longest request)
+```
+
+2. 100 requests and 100 concurrenct connections
+
+```
+ab -n 100 -c 100 -k http://localhost:8000/api/v1/ping
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8000
+
+Document Path:          /api/v1/ping
+Document Length:        571 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.013 seconds
+Complete requests:      100
+Failed requests:        0
+Keep-Alive requests:    100
+Total transferred:      123300 bytes
+HTML transferred:       57100 bytes
+Requests per second:    7521.06 [#/sec] (mean)
+Time per request:       13.296 [ms] (mean)
+Time per request:       0.133 [ms] (mean, across all concurrent requests)
+Transfer rate:          9056.12 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    3   0.5      3       3
+Processing:     4    5   0.4      5       6
+Waiting:        2    5   0.5      5       6
+Total:          4    8   0.6      8       9
+
+Percentage of the requests served within a certain time (ms)
+  50%      8
+  66%      8
+  75%      8
+  80%      8
+  90%      8
+  95%      8
+  98%      9
+  99%      9
+ 100%      9 (longest request)
+```
+
+3. 1000 requests and 100 concurrenct connections
+
+```
+ab -n 1000 -c 100 -k http://localhost:8000/api/v1/ping
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8000
+
+Document Path:          /api/v1/ping
+Document Length:        571 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.057 seconds
+Complete requests:      1000
+Failed requests:        0
+Keep-Alive requests:    1000
+Total transferred:      1233000 bytes
+HTML transferred:       571000 bytes
+Requests per second:    17653.19 [#/sec] (mean)
+Time per request:       5.665 [ms] (mean)
+Time per request:       0.057 [ms] (mean, across all concurrent requests)
+Transfer rate:          21256.23 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.9      0       3
+Processing:     1    5   1.5      5      12
+Waiting:        1    5   1.5      5      12
+Total:          1    5   1.9      5      12
+
+Percentage of the requests served within a certain time (ms)
+  50%      5
+  66%      6
+  75%      6
+  80%      6
+  90%      8
+  95%      9
+  98%      9
+  99%     10
+ 100%     12 (longest request)
+```
+
+### Laravel 11 (default)
+
+1. 100 requests and 10 concurrenct connections
+
+```
+ab -n 100 -c 10 -k http://127.0.0.1:8000/api/v1/ping
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 (be patient).....done
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8000
+
+Document Path:          /api/v1/ping
+Document Length:        18 bytes
+
+Concurrency Level:      10
+Time taken for tests:   0.754 seconds
+Complete requests:      100
+Failed requests:        0
+Keep-Alive requests:    0
+Total transferred:      117500 bytes
+HTML transferred:       1800 bytes
+Requests per second:    132.58 [#/sec] (mean)
+Time per request:       75.425 [ms] (mean)
+Time per request:       7.543 [ms] (mean, across all concurrent requests)
+Transfer rate:          152.13 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       1
+Processing:     9   70  14.9     72      91
+Waiting:        9   70  14.9     72      91
+Total:          9   70  14.9     72      91
+
+Percentage of the requests served within a certain time (ms)
+  50%     72
+  66%     77
+  75%     81
+  80%     82
+  90%     87
+  95%     89
+  98%     90
+  99%     91
+ 100%     91 (longest request)
+```
+2. 100 requests and 100 concurrenct connections
+
+```
+ab -n 100 -c 100 -k http://127.0.0.1:8000/api/v1/ping
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 (be patient).....done
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8000
+
+Document Path:          /api/v1/ping
+Document Length:        18 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.773 seconds
+Complete requests:      100
+Failed requests:        0
+Keep-Alive requests:    0
+Total transferred:      117500 bytes
+HTML transferred:       1800 bytes
+Requests per second:    129.33 [#/sec] (mean)
+Time per request:       773.239 [ms] (mean)
+Time per request:       7.732 [ms] (mean, across all concurrent requests)
+Transfer rate:          148.40 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    3   0.4      3       4
+Processing:    12  378 220.1    377     755
+Waiting:       11  378 220.2    377     755
+Total:         15  381 220.1    379     758
+
+Percentage of the requests served within a certain time (ms)
+  50%    379
+  66%    503
+  75%    579
+  80%    616
+  90%    689
+  95%    728
+  98%    748
+  99%    758
+ 100%    758 (longest request)
+```
+
+3. 1000 requests and 100 concurrenct connections
+
+```
+ab -n 1000 -c 100 -k http://127.0.0.1:8000/api/v1/ping
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.0.0.1 (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        127.0.0.1
+Server Port:            8000
+
+Document Path:          /api/v1/ping
+Document Length:        18 bytes
+
+Concurrency Level:      100
+Time taken for tests:   7.624 seconds
+Complete requests:      1000
+Failed requests:        0
+Keep-Alive requests:    0
+Total transferred:      1175000 bytes
+HTML transferred:       18000 bytes
+Requests per second:    131.17 [#/sec] (mean)
+Time per request:       762.389 [ms] (mean)
+Time per request:       7.624 [ms] (mean, across all concurrent requests)
+Transfer rate:          150.51 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.8      0       3
+Processing:    10  718 148.4    774     851
+Waiting:       10  718 148.4    774     851
+Total:         14  718 147.8    775     851
+
+Percentage of the requests served within a certain time (ms)
+  50%    775
+  66%    789
+  75%    799
+  80%    806
+  90%    819
+  95%    832
+  98%    843
+  99%    847
+ 100%    851 (longest request)
+```
+
+### Node Express
+
+1. 100 requests and 10 concurrenct connections
+
+```
+ab -n 100 -c 10 -k http://localhost:3000/
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            3000
+
+Document Path:          /
+Document Length:        139 bytes
+
+Concurrency Level:      10
+Time taken for tests:   0.055 seconds
+Complete requests:      100
+Failed requests:        0
+Non-2xx responses:      100
+Keep-Alive requests:    100
+Total transferred:      41100 bytes
+HTML transferred:       13900 bytes
+Requests per second:    1822.95 [#/sec] (mean)
+Time per request:       5.486 [ms] (mean)
+Time per request:       0.549 [ms] (mean, across all concurrent requests)
+Transfer rate:          731.67 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       1
+Processing:     1    4   6.7      2      34
+Waiting:        1    4   6.7      2      34
+Total:          1    4   6.8      2      34
+
+Percentage of the requests served within a certain time (ms)
+  50%      2
+  66%      2
+  75%      4
+  80%      4
+  90%     10
+  95%     27
+  98%     32
+  99%     34
+ 100%     34 (longest request)
+```
+
+2. 100 requests and 100 concurrenct connections
+
+```
+ab -n 100 -c 100 -k http://localhost:3000/
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            3000
+
+Document Path:          /
+Document Length:        139 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.038 seconds
+Complete requests:      100
+Failed requests:        0
+Non-2xx responses:      100
+Keep-Alive requests:    100
+Total transferred:      41100 bytes
+HTML transferred:       13900 bytes
+Requests per second:    2624.81 [#/sec] (mean)
+Time per request:       38.098 [ms] (mean)
+Time per request:       0.381 [ms] (mean, across all concurrent requests)
+Transfer rate:          1053.51 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    7   1.6      7       8
+Processing:     7   13   5.4     12      24
+Waiting:        2   13   5.5     12      24
+Total:          7   20   6.4     20      31
+
+Percentage of the requests served within a certain time (ms)
+  50%     20
+  66%     23
+  75%     26
+  80%     26
+  90%     29
+  95%     30
+  98%     31
+  99%     31
+ 100%     31 (longest request)
+```
+
+3. 1000 requests and 100 concurrenct connections
+
+```
+ab -n 1000 -c 100 -k http://localhost:3000/
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            3000
+
+Document Path:          /
+Document Length:        139 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.139 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Keep-Alive requests:    1000
+Total transferred:      411000 bytes
+HTML transferred:       139000 bytes
+Requests per second:    7208.77 [#/sec] (mean)
+Time per request:       13.872 [ms] (mean)
+Time per request:       0.139 [ms] (mean, across all concurrent requests)
+Transfer rate:          2893.36 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   1.5      0       6
+Processing:     1   12  27.9      5     127
+Waiting:        1   12  27.9      5     126
+Total:          1   13  29.2      5     131
+
+Percentage of the requests served within a certain time (ms)
+  50%      5
+  66%      5
+  75%      5
+  80%      6
+  90%     10
+  95%    127
+  98%    129
+  99%    131
+ 100%    131 (longest request)
+```
 
 ## Available Make Commands
 
