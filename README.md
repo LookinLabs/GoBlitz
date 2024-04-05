@@ -1,6 +1,7 @@
 # Go Web App Skeleton
 
-Go Web App Skeleton is a boilerplate for building web applications in Golang. It is built using the Gin Gonic framework and PostgreSQL as the database. It also includes a Dockerfile for containerization. The project is structured in a way that it is easy to add new features and scale the application.
+The Go Web App Skeleton is a boilerplate for building web applications in Golang, designed to mainly run on containers but can also be set up in a VM. The project is structured in a way that makes it easy to add new business logic features. Its architecture is similar to layered architecture with some MVC components meshed in.
+
 
 Feel free to fork the project and use it as a starting point for your next web application.
 
@@ -16,15 +17,16 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 ## Features
 
-- Status page at /status
 - Simple Ping API at /api/v1/ping
+- Status page at /status
 - PostgreSQL Connection
-- Security Headers + Host Header Injection Fix
-- Static files serving via public folder
+- Security Headers
+- SSRF protection via Host Header Validation
+- Static site serving at root path (/)
 - HTML Templates
-- Container Compatible
 - Error Handling
-- Comprehensive Go Linting
+- Container Compatible
+- Comprehensive and quite strict quality scan
 - Quick Code Verification Workflow via Github Actions
 
 ## Folder structure
@@ -38,9 +40,24 @@ Feel free to fork the project and use it as a starting point for your next web a
 - `public/` - Static files for the UI
 - `public/errors` - Error pages served by the web application
 - `public/views` - HTML Templates, mostly used for rendering the UI via API
+- `repository`- Repository is a layer that connects the application to external services like databases, cache servers, etc.
 - `tests/` - GO Unit Tests for the web application
 
-## Architectural Logic
+## Architecture
+
+The architecture of the web application is layered, with some MVC components integrated.
+
+The middleware layer handles routing and serves the static site from the `public` folder. It interacts with the handler layer to process requests from clients and generate appropriate responses.
+
+The repository layer manages connections to external services such as databases and cache servers. It utilizes environment variables from the model component to establish connections with these external services.
+
+The `handler` component plays a crucial role in processing requests received from the middleware layer. It enriches these requests with necessary data for generating responses, using the model component in conjunction with the repository layer. Additionally, it manages errors and sends appropriate responses back to the middleware layer.
+
+The `model` component contains data structures for handlers and environment variable values used by the repository, middleware, and handler components.
+
+The `config` component facilitates configuring the application through code. It stores configuration settings for the repository, middleware, and handler components. The config component is combined with the model to establish data structures that promote code reusability across all layers and components.
+
+
 ![Architecture](./docs/assets/architecture.png)
 
 ## Available Make Commands
