@@ -34,21 +34,21 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 ## Folder structure
 
-- `config` - Configuration as code (e.g. Environment Variables, Gin Gonic Configuration)
+- `config` - Custom component. Configuration as code (e.g. Environment Variables, Gin Gonic Configuration)
 - `docs` - Web Application documentation
-- `handlers` - Contain the logic for the web application (e.g. API, Error Handling, etc.)
-- `middleware` - Middleware is as HTTP Web Server for API routes, static site serving, etc. 
+- `handlers` - Controller component (in MVC architecture) folder. Contain the logic for the web application (e.g. API, Error Handling, etc.)
+- `middleware` - Middleware layer (in layered architecture) used as HTTP Web Server for API routes, static site serving, etc. 
 - `migrations/` - Database migrations for the web application
-- `models` - Models contain data structures
-- `public/` - Static files for the UI
+- `models` - Model component (in MVC architecture) folder which contain data structures where data is handled.
+- `public/` - View component (in MVC architecture) folder used to store static website.
 - `public/errors` - Error pages served by the web application
 - `public/views` - HTML Templates, mostly used for rendering the UI via API
-- `repository`- Repository is a layer that connects the application to external services like databases, cache servers, etc.
+- `repository`- Repository is a layer (in layered architecture) that connects the application to external services like databases, cache servers, etc.
 - `tests/` - GO Unit Tests for the web application
 
 ## Architecture
 
-The architecture of the web application is layered, with some MVC components integrated.
+The architecture of the web application is layered, with some MVC and custom components integrated.
 
 The middleware layer handles routing and serves the static site from the `public` folder. It interacts with the handler layer to process requests from clients and generate appropriate responses.
 
