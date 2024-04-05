@@ -1,5 +1,7 @@
 # Go Web App Skeleton
 
+> :warning: **NOTE:** This project is currently under development and does not have a stable version yet. Please use with caution.
+
 The Go Web App Skeleton is a boilerplate for building web applications in Golang, designed to mainly run on containers but can also be set up in a VM. The project is structured in a way that makes it easy to add new business logic features. Its architecture is similar to layered architecture with some MVC components meshed in.
 
 
