@@ -67,7 +67,6 @@ The `config` component facilitates configuring the application through code. It 
 
 The `templates` component generates values for the HTML templates located in `public/views/` folder.
 
-
 ![Architecture](./docs/assets/architecture.png)
 
 ## Benchmarks
