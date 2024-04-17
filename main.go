@@ -12,11 +12,16 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(".env"); os.Getenv("GO_ENV") == "development" && err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		log.Fatalf("Error loading .env file")
 	}
 
-	if os.Getenv("PSQLEnabled") == "true" {
+	if os.Getenv("APP_ENV") == "production" && os.Getenv("DEBUG_MODE") != "true" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	psql := os.Getenv("PSQLEnabled")
+	if psql == "true" {
 		db, err := repository.NewDBConnection()
 		if err != nil {
 			log.Fatalf("Failed to establish database connection: %v", err)
@@ -24,7 +29,7 @@ func main() {
 		defer db.Close()
 	}
 
-	router := gin.Default()
+	router := gin.New()
 	httpRouter := middleware.NewRouter(router)
 
 	err := httpRouter.Run(":" + os.Getenv("APP_PORT"))

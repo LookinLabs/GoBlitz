@@ -12,6 +12,9 @@ import (
 )
 
 func NewRouter(router *gin.Engine) *gin.Engine {
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
+
 	router.Use(func(c *gin.Context) {
 		host := c.Request.Host
 		if host != os.Getenv("APP_HOST") {
@@ -28,10 +31,12 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 		c.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
 	})
 
-	router.LoadHTMLGlob("./public/views/*.html")
 	router.Use(static.Serve("/", static.LocalFile("./public/", true)))
 
 	router.GET(os.Getenv("API_PATH")+"/ping", apiHandler.StatusOkPingResponse)
+
+	// HTML Templates & Status Page
+	router.LoadHTMLGlob("./public/views/*.html")
 	router.GET("/status", templates.StatusPageResponse(), func(c *gin.Context) {
 		statuses := c.MustGet("statuses").([]map[string]string)
 		c.HTML(http.StatusOK, "status.html", gin.H{
