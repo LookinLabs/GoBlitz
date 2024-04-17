@@ -4,20 +4,28 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	envModel "web/model/config"
+	"os"
 )
 
-func NewDBConnection(env envModel.PostgresEnv) (*sql.DB, error) {
-	connStr := "postgres://" + env.DBUser + ":" + env.DBPassword + "@" + env.DBHost + ":" + env.DBPort + "/" + env.DBDatabase + "?sslmode=disable"
+func NewDBConnection() (*sql.DB, error) {
+	conn := fmt.Sprintf(
+		// postgres://username:password@host:port/database?sslmode=disable
+		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_PORT"),
+		os.Getenv("POSTGRES_DB"),
+	)
 
-	db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("postgres", conn)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to the database: %v", err)
+		return nil, fmt.Errorf("the database refused the connection - %v", err)
 	}
 
 	err = db.Ping()
 	if err != nil {
-		return nil, fmt.Errorf("failed to ping the database: %v", err)
+		return nil, fmt.Errorf("the database connection timed out - %v", err)
 	}
 
 	log.Println("Connected to the PostgreSQL database!")

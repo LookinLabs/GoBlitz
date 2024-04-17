@@ -1,4 +1,9 @@
+_DEFAULT_GOAL := run
+
 include .env
+
+build:
+	go build -o bin/main main.go
 
 run:
 	go run main.go

@@ -34,7 +34,7 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 ## Folder structure
 
-- `config` - Custom component. Configuration as code (e.g. Environment Variables, Gin Gonic Configuration)
+- `bin`- Binary folder for the web application. Mostly used for different scripts or when compiling Go code
 - `docs` - Web Application documentation
 - `handlers` - Controller component (in MVC architecture) folder. Contain the logic for the web application (e.g. API, Error Handling, etc.)
 - `handlers/api` - API request and response handling
@@ -42,7 +42,6 @@ Feel free to fork the project and use it as a starting point for your next web a
 - `middleware` - Middleware layer (in layered architecture) used as HTTP Web Server for API routes, static site serving, etc. 
 - `migrations/` - Database migrations for the web application
 - `model` - Model component (in MVC architecture) folder which contain data structures where data is handled.
-- `model/config` - Configuration data structures
 - `model/templates` - HTML Templates data structures
 - `public` - View component (in MVC architecture) folder used to store static website.
 - `public/errors` - Error pages served by the web application
@@ -57,13 +56,11 @@ The architecture of the web application is layered, with some MVC and custom com
 
 The middleware layer handles routing and serves the static site from the `public` folder. It interacts with the handler layer to process requests from clients and generate appropriate responses.
 
-The repository layer manages connections to external services such as databases and cache servers. It utilizes environment variables from the model component to establish connections with these external services.
+The repository layer manages connections to external services such as databases and cache servers.
 
 The `handler` component plays a crucial role in processing requests received from the middleware layer. It enriches these requests with necessary data for generating responses, using the model component in conjunction with the repository layer. Additionally, it manages errors and sends appropriate responses back to the middleware layer.
 
-The `model` component contains data structures for config, templates, repository, middleware, and handler components.
-
-The `config` component facilitates configuring the application through code. It stores configuration settings for the repository, middleware, and handler components. The config component is combined with the model to establish data structures that promote code reusability across all layers and components.
+The `model` component contain data structures.
 
 The `templates` component generates values for the HTML templates located in `public/views/` folder.
 

@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"net/http"
+	"os"
 	"testing"
-	"web/config"
-	templatesModel "web/model/templates"
+	model "web/model"
 	templates "web/templates"
 
 	"github.com/jarcoal/httpmock"
@@ -12,15 +12,17 @@ import (
 )
 
 func TestStatusPageWhenAllServicesDown(tests *testing.T) {
-	env, _ := config.LoadEnvironmentals()
-
+	urlPrefix := os.Getenv("FORCE_TLS")
+	if urlPrefix == "" {
+		urlPrefix = "http://"
+	}
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	services := []templatesModel.ServiceStatusInfo{
+	services := []model.ServiceStatusInfo{
 		{
 			Name: "API",
-			URL:  env.URLPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "ping",
+			URL:  urlPrefix + os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT") + os.Getenv("API_PATH") + "ping",
 		},
 	}
 

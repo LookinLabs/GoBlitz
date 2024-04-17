@@ -1,4 +1,4 @@
-package templatesmodel
+package model
 
 // StatusPage
 type ServiceStatusInfo struct {

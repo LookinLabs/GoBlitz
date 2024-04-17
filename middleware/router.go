@@ -2,38 +2,48 @@ package middleware
 
 import (
 	"net/http"
-	"web/config"
+	"os"
 	apiHandler "web/handlers/api"
 	errorHandler "web/handlers/error"
-	envModel "web/model/config"
 	templates "web/templates"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(router *gin.Engine, env envModel.AppEnv) *gin.Engine {
-	// Setup Security Headers and check for valid host
+func NewRouter(router *gin.Engine) *gin.Engine {
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
+
 	router.Use(func(c *gin.Context) {
-		config.MiddlewareHTTPConfig(c, env)
+		host := c.Request.Host
+		if host != os.Getenv("APP_HOST") {
+			c.String(http.StatusBadRequest, "Invalid host")
+			c.Abort()
+			return
+		}
+
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("Content-Security-Policy", "default-src 'self'; connect-src *; font-src *; script-src-elem * 'unsafe-inline'; img-src * data:; style-src * 'unsafe-inline';")
+		c.Header("X-XSS-Protection", "1; mode=block")
+		c.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+		c.Header("Referrer-Policy", "strict-origin")
+		c.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
 	})
 
-	// Load HTML Templates
-	router.LoadHTMLGlob("./public/views/*.html")
-
-	// Serve static files
 	router.Use(static.Serve("/", static.LocalFile("./public/", true)))
 
-	// API Routes
-	router.GET(env.APIPath+"/ping", apiHandler.StatusOkPingResponse)
-	router.GET("/status", templates.StatusPageResponse(env), func(c *gin.Context) {
+	router.GET(os.Getenv("API_PATH")+"/ping", apiHandler.StatusOkPingResponse)
+
+	// HTML Templates & Status Page
+	router.LoadHTMLGlob("./public/views/*.html")
+	router.GET("/status", templates.StatusPageResponse(), func(c *gin.Context) {
 		statuses := c.MustGet("statuses").([]map[string]string)
 		c.HTML(http.StatusOK, "status.html", gin.H{
 			"services": statuses,
 		})
 	})
 
-	// Error Handlers
 	router.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusNotFound, "public/error/404.html", nil)
 	})

@@ -2,13 +2,13 @@ package templates
 
 import (
 	"net/http"
-	envModel "web/model/config"
-	templatesModel "web/model/templates"
+	"os"
+	model "web/model"
 
 	"github.com/gin-gonic/gin"
 )
 
-func serviceHealthHandler(serviceInfo templatesModel.ServiceStatusInfo) map[string]string {
+func serviceHealthHandler(serviceInfo model.ServiceStatusInfo) map[string]string {
 	resp, err := http.Get(serviceInfo.URL)
 	service := map[string]string{
 		"name": serviceInfo.Name,
@@ -28,7 +28,7 @@ func serviceHealthHandler(serviceInfo templatesModel.ServiceStatusInfo) map[stri
 	return service
 }
 
-func CheckServicesStatus(services []templatesModel.ServiceStatusInfo) []map[string]string {
+func CheckServicesStatus(services []model.ServiceStatusInfo) []map[string]string {
 	statuses := make([]map[string]string, 0)
 	for _, service := range services {
 		status := serviceHealthHandler(service)
@@ -37,10 +37,17 @@ func CheckServicesStatus(services []templatesModel.ServiceStatusInfo) []map[stri
 	return statuses
 }
 
-func StatusPageResponse(env envModel.AppEnv) gin.HandlerFunc {
+func StatusPageResponse() gin.HandlerFunc {
+	urlPrefix := os.Getenv("FORCE_TLS")
+	if urlPrefix == "" {
+		urlPrefix = "http://"
+	}
 	return func(c *gin.Context) {
-		services := []templatesModel.ServiceStatusInfo{
-			{Name: "API", URL: env.URLPrefix + env.AppHost + ":" + env.AppPort + env.APIPath + "ping"},
+		services := []model.ServiceStatusInfo{
+			{
+				Name: "API",
+				URL:  urlPrefix + os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT") + os.Getenv("API_PATH") + "ping",
+			},
 		}
 
 		statuses := CheckServicesStatus(services)
