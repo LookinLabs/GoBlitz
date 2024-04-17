@@ -34,6 +34,7 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 ## Folder structure
 
+- `bin`- Binary folder for the web application. Mostly used for different scripts or when compiling Go code
 - `docs` - Web Application documentation
 - `handlers` - Controller component (in MVC architecture) folder. Contain the logic for the web application (e.g. API, Error Handling, etc.)
 - `handlers/api` - API request and response handling

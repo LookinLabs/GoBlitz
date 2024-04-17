@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("Error loading .env file")
 	}
 
-	if os.Getenv("APP_ENV") == "production" && os.Getenv("DEBUG_MODE") != "true" {
+	if os.Getenv("DEBUG_MODE") != "true" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
