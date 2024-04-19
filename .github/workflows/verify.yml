@@ -7,18 +7,7 @@ on:
         - synchronize
         - edited
         - closed
-    paths:
-        - '.github/**'
-        - 'controller/**'
-        - 'docs/**'
-        - 'main.go'
-        - 'middleware/**'
-        - 'model/**'
-        - 'repository/**'
-        - 'service/**'
-        - 'tests/**'
-    branches:
-        - master
+
 env:
   GOPROXY: https://proxy.golang.org
 
