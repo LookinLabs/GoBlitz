@@ -1,12 +1,12 @@
-# Go Web App Skeleton
+# GoBlitz
 
 > :warning: **NOTE:** This project is currently under development and does not have a stable version yet. Please use with caution.
 
-The Go Web App Skeleton is a boilerplate for building web applications in Golang, designed to mainly run on containers but can also be set up in a VM. The project is structured in a way that makes it easy to add new business logic features. Its architecture is similar to layered architecture with some MVC components meshed in.
+GoBlitz is a powerful framework built on top of Gin Gonic, designed to help develop production ready web applications in Golang. GoBlitz creates an abstraction layer for the Gin-Gonic framework and provides a structured way to build web applications. It is designed to be fast, secure, and easy to use. The framework is built with security in mind and provides a set of security features to protect web applications from common web vulnerabilities.
 
-Web application built on top of the Gin Gonic framework are very fast and efficient. You can look for benchmarks [here](#benchmarks).
+You can look for GoBlitz benchmarks [here](#benchmarks).
 
-Feel free to fork the project and use it as a starting point for your next web application.
+Feel free to fork this repository as website boilerplate for your next project.
 
 ## Technologies used
 
@@ -21,57 +21,42 @@ Feel free to fork the project and use it as a starting point for your next web a
 
 ## Features
 
-- Simple Ping API at /api/v1/ping
-- Status page at /status
-- PostgreSQL Connection
-- Security Headers
-- SSRF protection via Host Header Validation
-- Static site serving at root path (/)
-- HTML Templates
-- Error Handling
 - Container Compatible
 - Comprehensive and quite strict quality scan
-- Quick Code Verification Workflow via Github Actions
+- Error Handling
+- Go Templates
+- Go Autoloader via Air
+- Migrations via Goose
+- PostgreSQL Connection
+- HTML Templates
+- Production-Ready Code Check
+- Simple Ping JSON API at /api/v1/ping
+- Simple Status page at /status
+- Security Headers & SSRF Protection
+- Static site serving at root path (/)
 
 ## Folder structure
 
 - `bin`- Binary folder for the web application. Mostly used for different scripts or when compiling Go code
 - `docs` - Web Application documentation
-- `handlers` - Controller component (in MVC architecture) folder. Contain the logic for the web application (e.g. API, Error Handling, etc.)
-- `handlers/api` - API request and response handling
-- `handlers/error` - Error handling
+- `controller` - Controller component (in MVC architecture) folder. Contain the logic for the web application (e.g. API, Error Handling, etc.)
+- `controller/api` - API request and response handling
+- `controller/error` - Error handling
 - `middleware` - Middleware layer (in layered architecture) used as HTTP Web Server for API routes, static site serving, etc. 
 - `migrations/` - Database migrations for the web application
 - `model` - Model component (in MVC architecture) folder which contain data structures where data is handled.
-- `model/templates` - HTML Templates data structures
 - `public` - View component (in MVC architecture) folder used to store static website.
 - `public/errors` - Error pages served by the web application
-- `public/views` - HTML Templates, mostly used for rendering the UI via API
 - `repository`- Repository is a layer (in layered architecture) that connects the application to external services like databases, cache servers, etc.
-- `templates` - HTML Template value generation to handle them in `public/views` folder
+- `templates` - GO Templates
 - `tests` - GO Unit Tests for the web application
-
-## Architecture
-
-The architecture of the web application is layered, with some MVC and custom components integrated.
-
-The middleware layer handles routing and serves the static site from the `public` folder. It interacts with the handler layer to process requests from clients and generate appropriate responses.
-
-The repository layer manages connections to external services such as databases and cache servers.
-
-The `handler` component plays a crucial role in processing requests received from the middleware layer. It enriches these requests with necessary data for generating responses, using the model component in conjunction with the repository layer. Additionally, it manages errors and sends appropriate responses back to the middleware layer.
-
-The `model` component contain data structures.
-
-The `templates` component generates values for the HTML templates located in `public/views/` folder.
-
-![Architecture](./docs/assets/architecture.png)
+- `views` - View component (in MVC architecture) folder used to store HTML templates.
 
 ## Benchmarks
 
 Benchmarks are done via ApacheBench. We're comparing here the performance of default web application written via Go and Laravel against /api/v1/ping endpoint which contains only JSON message: `{"message": "pong"}`.
 
-### Go Web App Skeleton (Built on Gin-Gonic)
+### GoBlitz
 
 1. 100 requests and 10 concurrenct connections
 
