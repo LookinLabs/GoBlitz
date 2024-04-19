@@ -1,4 +1,4 @@
-package errorhandler
+package error
 
 import (
 	"io"
