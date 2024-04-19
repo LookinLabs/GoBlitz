@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 	model "web/model"
-	templates "web/templates"
+	templates "web/views/view_templates"
 
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"

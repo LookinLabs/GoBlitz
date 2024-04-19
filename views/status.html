@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Status Page</title>
-    <link rel="stylesheet" href="/public/views/css/status.css">
+    <link rel="stylesheet" href="/templates/assets/status.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
@@ -12,7 +12,7 @@
         <div class="service bg-white shadow rounded-lg p-4 mb-4 flex justify-between items-center">
             <h2 class="text-xl font-bold mb-2">{{.name}}</h2>
             {{if eq .status "up"}}
-            <div class="status text-green-500">
+            <div class="status text-green-500 mb-2">
                 <span>&#10003;</span>
             </div>
             {{else}}

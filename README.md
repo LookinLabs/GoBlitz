@@ -17,6 +17,7 @@ Feel free to fork the project and use it as a starting point for your next web a
 - [Golang CI Lint](https://github.com/golangci/golangci-lint) - Golang Linter
 - [GoSec](https://github.com/securego/gosec) - Golang Security Scan
 - [TailwindCSS](https://tailwindcss.com/docs/installation/play-cdn) - CSS Framework from the CDN
+- [Air](https://github.com/cosmtrek/air) - Live reload for Go applications
 
 ## Features
 
@@ -611,6 +612,23 @@ make run || go run main.go
 
 Feel free to visit the application at localhost:8000 and move around available paths
 
+## Running the application with Live Reload (Air)
+
+1. Install Air
+
+```bash
+curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s
+mv ./bin/air /usr/local/bin/air
+```
+
+2. Run the application with Air
+
+```bash
+make
+```
+
 ## Contribution
 
-Feel free to contribute to the project by creating a pull request. Make sure to follow the [Contribution Guidelines](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
+Feel free to contribute to the project by creating a pull request.
+
+Make sure to follow the [Contribution Guidelines](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).

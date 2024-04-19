@@ -1,6 +1,9 @@
-_DEFAULT_GOAL := run
+_DEFAULT_GOAL := air
 
 include .env
+
+air:
+	@air
 
 build:
 	go build -o bin/main main.go
