@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 	"os"
-	apiHandler "web/handlers/api"
-	errorHandler "web/handlers/error"
+	apiHandler "web/controller/api"
+	errorHandler "web/controller/error"
 	templates "web/views/view_templates"
 
 	"github.com/gin-contrib/static"
