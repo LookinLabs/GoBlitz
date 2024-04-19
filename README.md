@@ -8,6 +8,11 @@ You can look for GoBlitz benchmarks [here](#benchmarks).
 
 Feel free to fork this repository as website boilerplate for your next project.
 
+
+## Architectural overview
+
+![Architectural Overview](docs/assets/architecture.png)
+
 ## Technologies used
 
 - [Dependabot](https://github.com/dependabot) - Dependency Management
