@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"testing"
@@ -8,14 +9,16 @@ import (
 	templates "web/views/view_templates"
 
 	"github.com/jarcoal/httpmock"
+	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestStatusPageWhenAllServicesDown(tests *testing.T) {
-	urlPrefix := os.Getenv("FORCE_TLS")
-	if urlPrefix == "" {
-		urlPrefix = "http://"
+	if err := godotenv.Load("../.env.tests"); err != nil {
+		log.Fatalf("Error loading .env.tests file")
 	}
+
+	urlPrefix := "http://"
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 

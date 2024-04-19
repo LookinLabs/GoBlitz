@@ -24,7 +24,7 @@ gosec:
 	@gosec -quiet ./...
 
 test:
-	@env $(cat .env | xargs) go test -v ./tests/ -p 32
+	@go test ./tests/ -p 32
 
 validate: linter gosec test
 

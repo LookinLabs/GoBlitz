@@ -10,25 +10,25 @@ import (
 )
 
 func serviceHealthHandler(serviceInfo model.ServiceStatusInfo) map[string]string {
-    log.Println("Checking service status at URL:", serviceInfo.URL)
-    resp, err := http.Get(serviceInfo.URL)
-    service := map[string]string{
-        "name": serviceInfo.Name,
-    }
+	log.Println("Checking service status at URL:", serviceInfo.URL)
+	resp, err := http.Get(serviceInfo.URL)
+	service := map[string]string{
+		"name": serviceInfo.Name,
+	}
 
-    if err != nil {
-        log.Println("Error checking service status:", err)
-        service["status"] = "down"
-    } else {
-        defer resp.Body.Close()
-        if resp.StatusCode == http.StatusOK {
-            service["status"] = "up"
-        } else {
-            service["status"] = "down"
-        }
-    }
+	if err != nil {
+		log.Println("Error checking service status:", err)
+		service["status"] = "down"
+	} else {
+		defer resp.Body.Close()
+		if resp.StatusCode == http.StatusOK {
+			service["status"] = "up"
+		} else {
+			service["status"] = "down"
+		}
+	}
 
-    return service
+	return service
 }
 
 func CheckServicesStatus(services []model.ServiceStatusInfo) []map[string]string {
