@@ -5,7 +5,7 @@ import (
 	"os"
 	apiController "web/controller/api"
 	errorController "web/controller/error"
-	httpTemplates "web/views/view_templates"
+	httpTemplates "web/views/templates"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"

@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 	model "web/model"
-	httpTemplates "web/views/view_templates"
+	httpTemplates "web/views/templates"
 
 	"github.com/jarcoal/httpmock"
 	"github.com/joho/godotenv"
