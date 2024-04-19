@@ -1,4 +1,4 @@
-package viewerror
+package ctrlerror
 
 import (
 	"io"
