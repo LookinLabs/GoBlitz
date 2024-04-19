@@ -5,7 +5,7 @@ import (
 	"os"
 	apiController "web/controller/api"
 	errorController "web/controller/error"
-	templates "web/views/view_templates"
+	httpTemplates "web/views/view_templates"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -19,7 +19,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	router.Use(func(c *gin.Context) {
 		hostHeader := c.Request.Host
 
-        // Localhost Host Header is APP_HOST + APP_PORT (e.g. localhost:8000)
+		// Localhost Host Header is APP_HOST + APP_PORT (e.g. localhost:8000)
 		localHostHeader := os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT")
 		if hostHeader != localHostHeader && hostHeader != os.Getenv("APP_HOST") {
 			c.String(http.StatusBadRequest, "Invalid host")
@@ -47,7 +47,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	// HTML Templates (e.g Status page)
 	router.LoadHTMLGlob("./views/*.html")
 	router.Use(static.Serve("/templates/assets", static.LocalFile("./views/assets/", true)))
-	router.GET("/status", templates.StatusPageResponse(), func(c *gin.Context) {
+	router.GET("/status", httpTemplates.StatusPageResponse(), func(c *gin.Context) {
 		statuses := c.MustGet("statuses").([]map[string]string)
 		c.HTML(http.StatusOK, "status.html", gin.H{
 			"services": statuses,

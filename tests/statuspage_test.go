@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 	model "web/model"
-	templates "web/views/view_templates"
+	httpTemplates "web/views/view_templates"
 
 	"github.com/jarcoal/httpmock"
 	"github.com/joho/godotenv"
@@ -34,7 +34,7 @@ func TestStatusPageWhenAllServicesDown(tests *testing.T) {
 		httpmock.RegisterResponder("GET", service.URL, httpmock.NewErrorResponder(http.ErrServerClosed))
 	}
 
-	statuses := templates.CheckServicesStatus(services)
+	statuses := httpTemplates.CheckServicesStatus(services)
 
 	// Check the status of all services
 	for i, service := range services {
