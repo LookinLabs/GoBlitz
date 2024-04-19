@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 	"os"
-	apiHandler "web/controller/api"
-	errorHandler "web/controller/error"
+	apiController "web/controller/api"
+	errorController "web/controller/error"
 	templates "web/views/view_templates"
 
 	"github.com/gin-contrib/static"
@@ -42,7 +42,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	})
 
 	// API Handling
-	router.GET(os.Getenv("API_PATH")+"/ping", apiHandler.StatusOkPingResponse)
+	router.GET(os.Getenv("API_PATH")+"/ping", apiController.StatusOkPingResponse)
 
 	// HTML Templates (e.g Status page)
 	router.LoadHTMLGlob("./views/*.html")
@@ -59,8 +59,8 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 		c.HTML(http.StatusNotFound, "public/error/404.html", nil)
 	})
 
-	router.Use(errorHandler.StatusInternalServerError())
-	router.NoRoute(errorHandler.StatusNotFound)
+	router.Use(errorController.StatusInternalServerError())
+	router.NoRoute(errorController.StatusNotFound)
 
 	return router
 }
