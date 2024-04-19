@@ -16,8 +16,9 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	router.Use(gin.Recovery())
 
 	router.Use(func(c *gin.Context) {
-		host := c.Request.Host
-		if host != os.Getenv("APP_HOST") {
+		hostHeader := c.Request.Host
+		appHost := os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT")
+		if hostHeader != appHost && hostHeader != "localhost" {
 			c.String(http.StatusBadRequest, "Invalid host")
 			c.Abort()
 			return
