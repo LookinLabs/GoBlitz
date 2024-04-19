@@ -18,8 +18,10 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	// Security Headers
 	router.Use(func(c *gin.Context) {
 		hostHeader := c.Request.Host
-		appHost := os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT")
-		if hostHeader != appHost && hostHeader != "localhost" {
+
+        // Localhost Host Header is APP_HOST + APP_PORT (e.g. localhost:8000)
+		localHostHeader := os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT")
+		if hostHeader != localHostHeader && hostHeader != os.Getenv("APP_HOST") {
 			c.String(http.StatusBadRequest, "Invalid host")
 			c.Abort()
 			return
