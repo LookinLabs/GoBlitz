@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"log"
 	"net/http"
 	"os"
 	model "web/model"
@@ -9,12 +10,14 @@ import (
 )
 
 func serviceHealthHandler(serviceInfo model.ServiceStatusInfo) map[string]string {
+	log.Println("Checking service status at URL:", serviceInfo.URL)
 	resp, err := http.Get(serviceInfo.URL)
 	service := map[string]string{
 		"name": serviceInfo.Name,
 	}
 
 	if err != nil {
+		log.Println("Error checking service status:", err)
 		service["status"] = "down"
 	} else {
 		defer resp.Body.Close()
@@ -38,9 +41,9 @@ func CheckServicesStatus(services []model.ServiceStatusInfo) []map[string]string
 }
 
 func StatusPageResponse() gin.HandlerFunc {
-	urlPrefix := os.Getenv("FORCE_TLS")
-	if urlPrefix == "" {
-		urlPrefix = "http://"
+	urlPrefix := "http://"
+	if os.Getenv("FORCE_TLS") == "true" {
+		urlPrefix = "https://"
 	}
 	return func(c *gin.Context) {
 		services := []model.ServiceStatusInfo{

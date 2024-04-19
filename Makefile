@@ -1,6 +1,9 @@
-_DEFAULT_GOAL := run
+_DEFAULT_GOAL := air
 
 include .env
+
+air:
+	@air
 
 build:
 	go build -o bin/main main.go
@@ -21,7 +24,7 @@ gosec:
 	@gosec -quiet ./...
 
 test:
-	@env $(cat .env | xargs) go test -v ./tests/ -p 32
+	@go test ./tests/ -p 32
 
 validate: linter gosec test
 

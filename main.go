@@ -31,7 +31,6 @@ func main() {
 
 	router := gin.New()
 	httpRouter := middleware.NewRouter(router)
-
 	err := httpRouter.Run(":" + os.Getenv("APP_PORT"))
 	if err != nil {
 		log.Printf("Failed to start the server: %v", err)
