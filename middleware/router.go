@@ -42,7 +42,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	// API Handling
 	router.GET(os.Getenv("API_PATH")+"/ping", apiHandler.StatusOkPingResponse)
 
-	// HTML Templates & Status Page
+	// HTML Templates (e.g Status page)
 	router.LoadHTMLGlob("./views/*.html")
 	router.Use(static.Serve("/templates/assets", static.LocalFile("./views/assets/", true)))
 	router.GET("/status", templates.StatusPageResponse(), func(c *gin.Context) {
