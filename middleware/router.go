@@ -59,7 +59,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 		c.HTML(http.StatusNotFound, "public/error/404.html", nil)
 	})
 
-	router.Use(errorHandler.StatusBadGateway())
+	router.Use(errorHandler.StatusInternalServerError())
 	router.NoRoute(errorHandler.StatusNotFound)
 
 	return router
