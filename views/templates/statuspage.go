@@ -1,4 +1,4 @@
-package view
+package views
 
 import (
 	"log"
@@ -9,35 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func serviceHealthHandler(serviceInfo model.ServiceStatusInfo) map[string]string {
-	log.Println("Checking service status at URL:", serviceInfo.URL)
-	resp, err := http.Get(serviceInfo.URL)
-	service := map[string]string{
-		"name": serviceInfo.Name,
-	}
-
-	if err != nil {
-		log.Println("Error checking service status:", err)
-		service["status"] = "down"
-	} else {
-		defer resp.Body.Close()
-		if resp.StatusCode == http.StatusOK {
-			service["status"] = "up"
-		} else {
-			service["status"] = "down"
-		}
-	}
-
-	return service
-}
-
-func CheckServicesStatus(services []model.ServiceStatusInfo) []map[string]string {
-	statuses := make([]map[string]string, 0)
+func CheckServicesStatus(services []model.StatusPage) []map[string]string {
+	serviceStatuses := make([]map[string]string, 0)
 	for _, service := range services {
-		status := serviceHealthHandler(service)
-		statuses = append(statuses, status)
+		status := servicesHealthHandler(service)
+		serviceStatuses = append(serviceStatuses, status)
 	}
-	return statuses
+
+	return serviceStatuses
 }
 
 func StatusPageResponse() gin.HandlerFunc {
@@ -45,8 +24,9 @@ func StatusPageResponse() gin.HandlerFunc {
 	if os.Getenv("FORCE_TLS") == "true" {
 		urlPrefix = "https://"
 	}
+
 	return func(c *gin.Context) {
-		services := []model.ServiceStatusInfo{
+		services := []model.StatusPage{
 			{
 				Name: "API",
 				URL:  urlPrefix + os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT") + os.Getenv("API_PATH") + "ping",
@@ -58,4 +38,24 @@ func StatusPageResponse() gin.HandlerFunc {
 		c.Set("statuses", statuses)
 		c.Next()
 	}
+}
+
+func servicesHealthHandler(serviceInfo model.StatusPage) map[string]string {
+	resp, err := http.Get(serviceInfo.URL)
+
+	service := map[string]string{
+		"name":   serviceInfo.Name,
+		"status": "up",
+	}
+
+	if err != nil {
+		log.Println("Error checking service status:", err)
+	} else {
+		defer resp.Body.Close()
+		if resp.StatusCode != http.StatusOK {
+			service["status"] = "down"
+		}
+	}
+
+	return service
 }

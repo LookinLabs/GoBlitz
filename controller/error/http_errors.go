@@ -14,13 +14,13 @@ func StatusNotFound(c *gin.Context) {
 	c.Status(http.StatusNotFound)
 	file, err := os.Open("./public/error/404.html")
 	if err != nil {
-		log.Printf("Error opening file: %v", err)
+		log.Printf("error opening file: %v", err)
 		return
 	}
 	defer file.Close()
 	if _, err := io.Copy(c.Writer, file); err != nil {
 		if err := c.Error(err); err != nil {
-			log.Printf("Error adding error to Gin context: %v", err)
+			log.Printf("error adding error to Gin context: %v", err)
 		}
 	}
 }
@@ -33,13 +33,13 @@ func StatusInternalServerError() gin.HandlerFunc {
 				c.Status(http.StatusInternalServerError)
 				file, err := os.Open("./public/error/500.html")
 				if err != nil {
-					log.Printf("Error opening file: %v", err)
+					log.Printf("error opening file: %v", err)
 					return
 				}
 				defer file.Close()
 				if _, err := io.Copy(c.Writer, file); err != nil {
 					if err := c.Error(err); err != nil {
-						log.Printf("Error adding error to Gin context: %v", err)
+						log.Printf("error adding error to Gin context: %v", err)
 					}
 				}
 			}

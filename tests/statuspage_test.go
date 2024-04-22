@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"log"
 	"net/http"
 	"os"
 	"testing"
@@ -9,25 +8,24 @@ import (
 	httpTemplates "web/views/templates"
 
 	"github.com/jarcoal/httpmock"
-	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestStatusPageWhenAllServicesDown(tests *testing.T) {
-	if err := godotenv.Load("../.env.tests"); err != nil {
-		log.Fatalf("Error loading .env.tests file")
-	}
-
+func (suite *StatusPageSuite) TestStatusPageWhenAllServicesDown() {
+	// Arrange
 	urlPrefix := "http://"
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	services := []model.ServiceStatusInfo{
+	services := []model.StatusPage{
 		{
 			Name: "API",
 			URL:  urlPrefix + os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT") + os.Getenv("API_PATH") + "ping",
 		},
 	}
+
+	// Act
 
 	// Register mock responders for all service endpoints
 	for _, service := range services {
@@ -36,8 +34,13 @@ func TestStatusPageWhenAllServicesDown(tests *testing.T) {
 
 	statuses := httpTemplates.CheckServicesStatus(services)
 
+	// Assert
 	// Check the status of all services
 	for i, service := range services {
-		assert.Equalf(tests, "down", statuses[i]["status"], "Expected %s status to be down, got %s", service.Name, statuses[i]["status"])
+		assert.Equalf(suite.T(), "down", statuses[i]["status"], "expected %s status to be down, got %s", service.Name, statuses[i]["status"])
 	}
+}
+
+func WrapTestsIntoSuite(t *testing.T) {
+	suite.Run(t, new(StatusPageSuite))
 }
