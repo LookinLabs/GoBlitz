@@ -566,12 +566,6 @@ Percentage of the requests served within a certain time (ms)
 
 **Note!** Replace `API_PATH` with the actual path of the application. By default it's `/api/v1/`
 
-## Managing environment variables
-
-Environment variables are managed via struct in [envConfig Model](./src/model/envConfig.go). 
-
-You can add new environment variables in the struct and configure the defaults in [envConfig Configuration File](./src/config/envConfig.go).
-
 ## Getting Started
 
 1. Clone the repository
@@ -616,6 +610,12 @@ mv ./bin/air /usr/local/bin/air
 ```bash
 make
 ```
+
+## Docs
+
+### Controller
+
+- [Setting up controller for SQL Queries and exposing to the middleware HTTP Router](./docs/controller/database_controller.md)
 
 ## Contribution
 

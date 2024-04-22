@@ -10,10 +10,12 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func NewDBConnection() (*sql.DB, error) {
+var DB *sql.DB
+
+func NewDBConnection() error {
 	if os.Getenv("PSQL_ENABLED") != "true" && os.Getenv("APP_ENV") == "development" {
 		log.Println("Warning: PSQL is not enabled. Database queries will fail.")
-		return nil, nil
+		return nil
 	}
 
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
@@ -26,12 +28,14 @@ func NewDBConnection() (*sql.DB, error) {
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if err = db.Ping(); err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
+	// assign the *sql.DB instance to DB
+	DB = db
+	return nil
 }

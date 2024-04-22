@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-func (suite *StatusPageSuite) TestStatusPageWhenAllServicesDown() {
+func (suite *TestsSuite) TestStatusPageWhenAllServicesDown() {
 	// Arrange
 	urlPrefix := "http://"
 	httpmock.Activate()
@@ -42,5 +42,5 @@ func (suite *StatusPageSuite) TestStatusPageWhenAllServicesDown() {
 }
 
 func WrapTestsIntoSuite(t *testing.T) {
-	suite.Run(t, new(StatusPageSuite))
+	suite.Run(t, new(TestsSuite))
 }

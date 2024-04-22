@@ -32,7 +32,7 @@ migrate-create:
 	@goose -dir=migrations create "$(name)" sql
 
 migrate-up:
-	@goose -dir=migrations postgres "host=${PSQL_HOST} user=${PSQL_USERNAME} password=${PSQL_PASSWORD} dbname=${PSQL_DB} sslmode=disable" up
+	@goose -dir=migrations postgres "host=${POSTGRES_HOST} user=${POSTGRES_USER} password=${POSTGRES_PASSWORD} dbname=${POSTGRES_DB} sslmode=disable" up
 
 migrate-down:
-	@goose -dir=migrations postgres "host=${PSQL_HOST} user=${PSQL_USERNAME} password=${PSQL_PASSWORD} dbname=${PSQL_DB} sslmode=disable" down
+	@goose -dir=migrations postgres "host=${POSTGRES_HOST} user=${POSTGRES_USER} password=${POSTGRES_PASSWORD} dbname=${POSTGRES_DB} sslmode=disable" down

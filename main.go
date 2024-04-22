@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"os"
 	"web/middleware"
@@ -12,8 +11,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var DB *sql.DB
-
 func main() {
 	if err := godotenv.Load(".env"); err != nil {
 		log.Fatalf("error loading .env file")
@@ -23,13 +20,8 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	database, err := repository.NewDBConnection()
-	if err != nil {
+	if err := repository.NewDBConnection(); err != nil {
 		log.Fatalf("failed to establish database connection: %v", err)
-	}
-
-	if database != nil {
-		defer database.Close()
 	}
 
 	router := gin.New()

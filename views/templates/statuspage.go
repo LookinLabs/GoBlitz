@@ -31,6 +31,10 @@ func StatusPageResponse() gin.HandlerFunc {
 				Name: "API",
 				URL:  urlPrefix + os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT") + os.Getenv("API_PATH") + "ping",
 			},
+			{
+				Name: "Users API",
+				URL:  urlPrefix + os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT") + os.Getenv("API_PATH") + "users",
+			},
 		}
 
 		statuses := CheckServicesStatus(services)

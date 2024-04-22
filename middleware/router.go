@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 	"os"
-	apiController "web/controller/api"
+	"web/controller/api"
 	errorController "web/controller/error"
 	httpTemplates "web/views/templates"
 
@@ -42,7 +42,11 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	})
 
 	// API Handling
-	router.GET(os.Getenv("API_PATH")+"/ping", apiController.StatusOkPingResponse)
+	apiGroup := router.Group(os.Getenv("API_PATH"))
+	{
+		apiGroup.GET("/ping", api.StatusOkPingResponse)
+		apiGroup.GET("/users", api.GetUsers)
+	}
 
 	// HTML Templates (e.g Status page)
 	router.LoadHTMLGlob("./views/*.html")

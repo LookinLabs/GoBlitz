@@ -6,12 +6,12 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type StatusPageSuite struct {
+type TestsSuite struct {
 	suite.Suite
 }
 
 // SetupTest will be run before each test in the suite
-func (suite *StatusPageSuite) SetupTestEnvironmentals() {
+func (suite *TestsSuite) SetupTestEnvironmentals() {
 	os.Setenv("APP_PORT", "8000")
 	os.Setenv("APP_HOST", "localhost")
 	os.Setenv("DEBUG_MODE", "true")
