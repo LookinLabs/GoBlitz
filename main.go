@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"os"
 	"web/middleware"
@@ -10,6 +11,8 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
+
+var DB *sql.DB
 
 func main() {
 	if err := godotenv.Load(".env"); err != nil {
@@ -25,8 +28,8 @@ func main() {
 		log.Fatalf("failed to establish database connection: %v", err)
 	}
 
-	if database != nil && database.DB != nil {
-		defer database.DB.Close()
+	if database != nil {
+		defer database.Close()
 	}
 
 	router := gin.New()

@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
-	model "web/model"
 
 	// Import pq to register the Postgres driver.
 	_ "github.com/lib/pq"
 )
 
-func NewDBConnection() (*model.Database, error) {
+func NewDBConnection() (*sql.DB, error) {
 	if os.Getenv("PSQL_ENABLED") != "true" && os.Getenv("APP_ENV") == "development" {
 		log.Println("Warning: PSQL is not enabled. Database queries will fail.")
 		return nil, nil
@@ -34,5 +33,5 @@ func NewDBConnection() (*model.Database, error) {
 		return nil, err
 	}
 
-	return &model.Database{DB: db}, nil
+	return db, nil
 }
