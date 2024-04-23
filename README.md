@@ -613,9 +613,7 @@ make
 
 ## Docs
 
-### Controller
-
-- [Setting up controller for SQL Queries and exposing to the middleware HTTP Router](./docs/controller/database_controller.md)
+- [Setting up an example SQL Query and exposing the response to the middleware HTTP Router](./docs/controller/database_controller.md)
 
 ## Contribution
 
