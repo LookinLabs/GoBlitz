@@ -15,4 +15,6 @@ RUN apk add \
 
 RUN go mod download
 
+EXPOSE ${APP_PORT}
+
 CMD [ "go", "run", "main.go" ]

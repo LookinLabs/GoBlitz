@@ -1,1 +1,4 @@
 .env
+vendor/
+bin/main
+data
