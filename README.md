@@ -571,19 +571,20 @@ Percentage of the requests served within a certain time (ms)
 1. Clone the repository
 
 ```bash
-git clone git@github.com:KostLinux/example-go-web-app.git
+git clone git@github.com:KostLinux/example-go-web-app.git my-web-application
 ```
 
 2. Change the directory
 
 ```bash
-cd example-go-web-app
+cd my-web-application
 ```
 
-3. Configure .env (optional)
+3. Configure .env
 
 ```bash
-cp .env.example .env && nano .env
+cp .env.example .env
+nano .env
 ```
 
 4. Run the application
@@ -594,7 +595,7 @@ make run || go run main.go
 
 5. Visit the application in your browser
 
-Feel free to visit the application at localhost:8000 and move around available paths
+Feel free to visit the application at `localhost:8000` and move around available paths
 
 ## Running the application with Live Reload (Air)
 
