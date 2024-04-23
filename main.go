@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	"web/middleware"
-	repository "web/repository"
+	db "web/repository/db"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -20,7 +20,7 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	if err := repository.NewDBConnection(); err != nil {
+	if err := db.NewDBConnection(); err != nil {
 		log.Fatalf("failed to establish database connection: %v", err)
 	}
 
