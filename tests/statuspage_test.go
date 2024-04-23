@@ -12,6 +12,10 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
+func WrapTestsIntoSuite(t *testing.T) {
+	suite.Run(t, new(TestsSuite))
+}
+
 func (suite *TestsSuite) TestStatusPageWhenAllServicesDown() {
 	// Arrange
 	urlPrefix := "http://"
@@ -39,8 +43,4 @@ func (suite *TestsSuite) TestStatusPageWhenAllServicesDown() {
 	for i, service := range services {
 		assert.Equalf(suite.T(), "down", statuses[i]["status"], "expected %s status to be down, got %s", service.Name, statuses[i]["status"])
 	}
-}
-
-func WrapTestsIntoSuite(t *testing.T) {
-	suite.Run(t, new(TestsSuite))
 }
