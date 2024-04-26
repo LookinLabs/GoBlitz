@@ -10,7 +10,6 @@ Feel free to fork this repository as website boilerplate for your next project.
 
 
 ## Architectural overview
-
 ![Architectural Overview](docs/assets/architecture.png)
 
 ## Technologies used
