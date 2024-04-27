@@ -5,6 +5,7 @@ import (
 	"os"
 	"web/controller/api"
 	errorController "web/controller/error"
+	viewController "web/controller/views"
 	httpTemplates "web/views/templates"
 
 	"github.com/gin-contrib/static"
@@ -36,7 +37,9 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	})
 
 	// Static File Handling
-	router.Use(static.Serve("/", static.LocalFile("./public/", true)))
+	if _, err := os.Stat("./public/index.html"); os.IsExist(err) {
+		router.Use(static.Serve("/", static.LocalFile("./public/", true)))
+	}
 	router.GET("/favicon.ico", func(c *gin.Context) {
 		c.String(http.StatusNoContent, "")
 	})
@@ -49,14 +52,10 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	}
 
 	// HTML Templates (e.g Status page)
-	router.LoadHTMLGlob("./views/*.html")
+	router.LoadHTMLGlob("./views/**/*")
 	router.Use(static.Serve("/templates/assets", static.LocalFile("./views/assets/", true)))
-	router.GET("/status", httpTemplates.StatusPageResponse(), func(c *gin.Context) {
-		statuses := c.MustGet("statuses").([]map[string]string)
-		c.HTML(http.StatusOK, "status.html", gin.H{
-			"services": statuses,
-		})
-	})
+	router.GET("/status", httpTemplates.StatusPageResponse(), viewController.StatusPageController)
+	router.GET("/", viewController.WelcomePageController)
 
 	// Error Handling
 	router.NoRoute(func(c *gin.Context) {
