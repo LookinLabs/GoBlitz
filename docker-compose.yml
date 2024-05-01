@@ -9,4 +9,31 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
 
-  
+  go:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=db
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    command: go run main.go
+
+  ui:
+    image: node:20
+    env_file:
+      - .env
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    depends_on:
+      - go
+    command: bash -c "npm install && npm run dev -- --host"
