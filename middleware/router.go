@@ -5,7 +5,6 @@ import (
 	"os"
 	"web/controller/api"
 	errorController "web/controller/error"
-	viewController "web/controller/views"
 	httpTemplates "web/views/templates"
 
 	"github.com/gin-contrib/static"
@@ -38,7 +37,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 
 	if _, err := os.Stat("./public/index.html"); os.IsNotExist(err) {
 		// Load welcome page from html template
-		router.GET("/", viewController.WelcomePageController)
+		router.GET("/", WelcomePageMiddleware())
 	} else {
 		// Handle static files from the public folder
 		router.Use(static.Serve("/", static.LocalFile("./public/", true)))
@@ -59,11 +58,10 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 
 	// HTML Templates (e.g Status page)
 	router.LoadHTMLGlob("./views/**/*")
-	router.GET("/status", httpTemplates.StatusPageResponse(), viewController.StatusPageController)
+	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
 
 	// Error handling
 	router.NoRoute(errorController.StatusNotFound)
-	router.Use(errorController.StatusInternalServerError())
 
 	return router
 }
