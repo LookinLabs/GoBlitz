@@ -3,21 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoBlitz Home</title>
+    <title>GoBlitz Web Framework</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/templates/assets/status.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/assets/main.css">
 </head>
-<body>
+<body class="bg-gradient-to-r from-teal-600 via-blue-400 to-teal-600 text-white">
     {{template "header.html"}}
-    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
-        <div class="flex-shrink-0">
-            <img class="h-12 w-12" src="logo.svg" alt="GoBlitz logo">
+    <section id="main">
+        <div class="flex flex-col items-center justify-center min-h-screen bg-center bg-cover bg-no-repeat bg-fixed" style="background-image: url('https://static.pexels.com/photos/3797/black-and-white-sport-fight-boxer.jpg');">
+            <h1 class="text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">GoBlitz</h1>
+            <div class="text-center mt-8">
+                <p class="mt-4 text-xl">GoBlitz is a web framework for building web applications in Go.</p>
+                <p class="mt-2 text-xl">It's designed to be fast, easy to manage and secure.</p>
+                <p class="mt-2 text-xl">Multiple times faster than Beego or Goravel.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-4 justify-items-center p-4 mt-16">
+                <div class="flex flex-col items-center text-center">
+                    <div class="mb-4 text-2xl">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h4 class="text-lg font-bold">Rocket Fast</h4>
+                    <p>Experience blazing speed with the power of Gin Gonic at the core.</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <div class="mb-4 text-2xl">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h4 class="text-lg font-bold">Quick Start</h4>
+                    <p>Grab the code and launch your first web application in no time.</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <div class="mb-4 text-2xl">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h4 class="text-lg font-bold">Secure</h4>
+                    <p>Robust security against common web application vulnerabilities.</p>
+                </div>
+            </div>
         </div>
-        <div>
-            <div class="text-xl font-medium text-black">Welcome to GoBlitz!</div>
-            <p class="text-gray-500">Thank you for visiting our website.</p>
-            <p class="text-gray-500">Feel free to explore our features and services.</p>
-        </div>
-    </div>
+    </section>
+    {{template "footer.html"}}
 </body>
 </html>

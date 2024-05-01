@@ -12,7 +12,7 @@ import (
 // Show 404 Not Found error page
 func StatusNotFound(c *gin.Context) {
 	c.Status(http.StatusNotFound)
-	file, err := os.Open("./public/error/404.html")
+	file, err := os.Open("./views/error/404.html")
 	if err != nil {
 		log.Printf("error opening file: %v", err)
 		return
@@ -31,7 +31,7 @@ func StatusInternalServerError() gin.HandlerFunc {
 		defer func() {
 			if request := recover(); request != nil {
 				c.Status(http.StatusInternalServerError)
-				file, err := os.Open("./public/error/500.html")
+				file, err := os.Open("./views/error/500.html")
 				if err != nil {
 					log.Printf("error opening file: %v", err)
 					return

@@ -36,10 +36,16 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 		c.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
 	})
 
-	// Static File Handling
-	if _, err := os.Stat("./public/index.html"); os.IsExist(err) {
+	if _, err := os.Stat("./public/index.html"); os.IsNotExist(err) {
+		// Load welcome page from html template
+		router.GET("/", viewController.WelcomePageController)
+	} else {
+		// Handle static files from the public folder
 		router.Use(static.Serve("/", static.LocalFile("./public/", true)))
 	}
+
+	// Serve static assets
+	router.Use(static.Serve("/assets", static.LocalFile("./public/assets", true)))
 	router.GET("/favicon.ico", func(c *gin.Context) {
 		c.String(http.StatusNoContent, "")
 	})
@@ -53,17 +59,11 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 
 	// HTML Templates (e.g Status page)
 	router.LoadHTMLGlob("./views/**/*")
-	router.Use(static.Serve("/templates/assets", static.LocalFile("./views/assets/", true)))
 	router.GET("/status", httpTemplates.StatusPageResponse(), viewController.StatusPageController)
-	router.GET("/", viewController.WelcomePageController)
 
-	// Error Handling
-	router.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "public/error/404.html", nil)
-	})
-
-	router.Use(errorController.StatusInternalServerError())
+	// Error handling
 	router.NoRoute(errorController.StatusNotFound)
+	router.Use(errorController.StatusInternalServerError())
 
 	return router
 }

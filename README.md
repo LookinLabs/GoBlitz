@@ -614,6 +614,8 @@ make
 ## Docs
 
 - [Setting up an example SQL Query and exposing the response to the middleware HTTP Router](./docs/controller/database_controller.md)
+- [Developing frontend via GoBlitz HTML Templates](./docs/views/frontend_goblitz.md)
+- [Using frontend framework with GoBlitz](./docs/views/react.md)
 
 ## Contribution
 
