@@ -1,0 +1,33 @@
+---
+    name: "Release"
+    
+    on:
+      push:
+        tags:
+          - "v[0-9].[0-9].[0-9][0-9]-*"
+          - "v[0-9].[0-9].[0-9][0-9]"
+    
+    jobs:
+      tagged-release:
+        name: "Tagged Release"
+        runs-on: "ubuntu-latest"
+    
+        steps:
+          # ...
+          - name: "Build & test"
+            run: |
+              echo "done!"
+    
+          - uses: "marvinpinto/action-automatic-releases@latest"
+            if: contains(github.ref, '-')
+            with:
+              title: "GoBlitz ${{ github.ref }}"
+              repo_token: "${{ secrets.API_TOKEN }}"
+              prerelease: true
+
+          - uses: "marvinpinto/action-automatic-releases@latest"
+            if: contains(github.ref, '-')
+            with:
+              title: "GoBlitz ${{ github.ref }}"
+              repo_token: "${{ secrets.API_TOKEN }}"
+              prerelease: true
