@@ -59,6 +59,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	// HTML Templates (e.g Status page)
 	router.LoadHTMLGlob("./views/**/*")
 	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
+	router.GET("/docs", DocumentationPageMiddleware())
 
 	// Error handling
 	router.NoRoute(errorController.StatusNotFound)

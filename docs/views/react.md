@@ -28,7 +28,7 @@ docker-compose up
 
 3. Navigate to `http://localhost:8000` for the Go App
 
-4. Navigate to localhost:5173 for React App
+4. Navigate to `http://localhost:5173` for React App
 
 ### Native (Hot Reload enabled)
 
@@ -55,9 +55,9 @@ npm install
 npm run dev
 ```
 
-4. Navigate to localhost:8000 for GoBlitz app
+4. Navigate to `localhost:8000` for GoBlitz app
 
-5. Navigate to localhost:5173 for React App
+5. Navigate to `localhost:5173` for React App
 
 ## Example (Production)
 
@@ -88,6 +88,6 @@ cp -rf dist/* ../public/
 make
 ```
 
-5. Navigate to localhost:8000 to check that everything's fine
+5. Navigate to `localhost:8000` to check that everything's fine
 
 6. Build your image from dockerfile and push to the remote

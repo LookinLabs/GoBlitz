@@ -4,14 +4,14 @@
 
 Assets (images, gifs, css, js files etc) are served from public folder. The relative path is `/assets`.
 
-You can look an example of importing assets in the [Welcome Page Code](../../views/mainPage/welcome.html).
+You can look an example of importing assets in the [Welcome Page Code](../../views/welcome_page/welcome.html).
 
 ## Using HTML Templates to setup pages
 
 In GoBlitz Views are similar to react, where you can define template components in views/components folder and then use them on the page.
-You can take a look for the [Welcome Page](../../views/mainPage/welcome.html)
+You can take a look for the [Welcome Page](../../views/welcome_page/welcome.html)
 
-The pages are separated into folders like views/mainPage/; views/statusPage etc.
+The pages are separated into folders like views/welcome_page/; views/status_page etc.
 
 HTML Template values are generated via [views/templates folder](../../views/templates/).
 
@@ -41,7 +41,7 @@ func StatusPageMiddleware() gin.HandlerFunc {
 	}
 }
 ```
-2. Setup an route for the statusPage
+2. Setup an route for the status_page
 
 ```
 // middleware/router.go
@@ -121,10 +121,10 @@ func servicesHealthHandler(serviceInfo model.StatusPage) map[string]string {
 }
 ```
 
-4. Setup an statusPage
+4. Setup an status_page
 
 ```
-// views/statusPage/status.html
+// views/status_page/status.html
 
 <!DOCTYPE html>
 <html>

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf views/mainPage
+rm -rf views/welcome_page
 echo "<!DOCTYPE html>
 <html>
 <head>
