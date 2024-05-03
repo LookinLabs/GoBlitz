@@ -64,7 +64,7 @@ func GetUsers(c *gin.Context) {
 
 ```
 
-3. Add into middleware your API Path
+4. Add into middleware your API Path
 
 ```
 	// API Handling
@@ -74,7 +74,7 @@ func GetUsers(c *gin.Context) {
 	}
 ```
 
-4. Setup environment and run migrations
+5. Setup environment and run migrations
 
 **Note!** Check that you have PostgreSQL enabled and running
 
@@ -82,7 +82,7 @@ func GetUsers(c *gin.Context) {
 
 `make migrate-up`
 
-5. Make an request against `/api/v1/users`
+6. Make an request against `/api/v1/users`
 
 ```
 curl http://localhost:8000/api/v1/users

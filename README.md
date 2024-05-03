@@ -49,12 +49,15 @@ Feel free to fork this repository as website boilerplate for your next project.
 - `middleware` - Middleware layer (in layered architecture) used as HTTP Web Server for API routes, static site serving, etc. 
 - `migrations/` - Database migrations for the web application
 - `model` - Model component (in MVC architecture) folder which contain data structures where data is handled.
-- `public` - View component (in MVC architecture) folder used to store static website.
-- `public/errors` - Error pages served by the web application
+- `public` - View component (in MVC architecture) folder used to store static website (mostly used for Vite or Webpack applications)
 - `repository`- Repository is a layer (in layered architecture) that connects the application to external services like databases, cache servers, etc.
 - `templates` - GO Templates mostly contain dynamic configuration for the controller
 - `tests` - GO Unit Tests for the web application
-- `views` - View component (in MVC architecture) folder used to store HTML templates.
+- `views` - View component (in MVC architecture) folder used to store HTML templates (Mostly used for GoBlitz frontend development)
+- `views/error` - Error pages served by the web application
+- `views/components` - HTML Template components (Footers, sidebars, headers etc)
+- `views/templates` - HTML Template value generators
+- `views/<..Page>` - Website shown from Go application
 
 ## Benchmarks
 
@@ -614,6 +617,8 @@ make
 ## Docs
 
 - [Setting up an example SQL Query and exposing the response to the middleware HTTP Router](./docs/controller/database_controller.md)
+- [Developing frontend via GoBlitz HTML Templates](./docs/views/frontend_goblitz.md)
+- [Using frontend framework with GoBlitz](./docs/views/react.md)
 
 ## Contribution
 
