@@ -1,19 +1,19 @@
 ---
-    name: "Release"
-    on:
-        push:
-          tags:
-            - "v[0-9]+\\.[0-9]+\\.[0-9]+-*"
-            - "v[0-9]+\\.[0-9]+\\.[0-9]+"
-      
-    jobs:
-      tagged-release:
-        name: "Tagged Release"
-        runs-on: "ubuntu-latest"
-    
-        steps:
-          - uses: "marvinpinto/action-automatic-releases@latest"
-            with:
-              title: "GoBlitz ${{ github.ref }}"
-              repo_token: "${{ secrets.API_TOKEN }}"
-              prerelease: true
+name: "Release"
+on:
+  push:
+    tags:
+      - "v[0-9]+\\.[0-9]+\\.[0-9]+-*"
+      - "v[0-9]+\\.[0-9]+\\.[0-9]+"
+
+jobs:
+  release:
+    name: "Release ${{ github.ref_name }}"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+            title: "GoBlitz ${{ github.ref_name }}"
+            repo_token: "${{ secrets.API_TOKEN }}"
+            prerelease: true
+            draft: true
