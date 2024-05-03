@@ -26,7 +26,7 @@ Feel free to fork this repository as website boilerplate for your next project.
 ## Features
 
 - Container Compatible
-- Comprehensive and quite strict quality scan
+- Comprehensive code quality scan
 - Error Handling
 - Go Templates
 - Go Autoloader via Air
@@ -52,7 +52,7 @@ Feel free to fork this repository as website boilerplate for your next project.
 - `public` - View component (in MVC architecture) folder used to store static website.
 - `public/errors` - Error pages served by the web application
 - `repository`- Repository is a layer (in layered architecture) that connects the application to external services like databases, cache servers, etc.
-- `templates` - GO Templates
+- `templates` - GO Templates mostly contain dynamic configuration for the controller
 - `tests` - GO Unit Tests for the web application
 - `views` - View component (in MVC architecture) folder used to store HTML templates.
 
@@ -570,7 +570,7 @@ Percentage of the requests served within a certain time (ms)
 1. Clone the repository
 
 ```bash
-git clone git@github.com:KostLinux/example-go-web-app.git my-web-application
+git clone git@github.com:KostLinux/GoBlitz.git my-web-application
 ```
 
 2. Change the directory
