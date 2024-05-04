@@ -17,22 +17,6 @@ Feel free to fork this repository as website boilerplate for your next project.
 - [TailwindCSS](https://tailwindcss.com/docs/installation/play-cdn) - CSS Framework from the CDN
 - [Air](https://github.com/cosmtrek/air) - Live reload for Go applications
 
-## Features
-
-- Container Compatible
-- Comprehensive code quality scan
-- Error Handling
-- Go Templates
-- Go Autoloader via Air
-- Migrations via Goose
-- PostgreSQL Connection
-- HTML Templates
-- Production-Ready Code Check
-- Simple Ping JSON API at /api/v1/ping
-- Simple Status page at /status
-- Security Headers & SSRF Protection
-- Static site serving at root path (/)
-
 ## Available Make Commands
 
 - `make build` - Build the application
@@ -57,6 +41,8 @@ Feel free to fork this repository as website boilerplate for your next project.
 **Note!** Replace `API_PATH` with the actual path of the application. By default it's `/api/v1/`
 
 ## Getting Started
+
+**Note!** Before getting started, make sure you have `Goose`, `Air`, `Golang CI Lint`, `Gosec` and `Go` installed on your host
 
 1. Clone the repository
 
@@ -104,7 +90,7 @@ make
 
 ## Docs
 
-You can visit the documentation at [https://goblitz.com](https://goblitz.com)
+You can find the documentation page [here](https://kostlinux.github.io/GoBlitz-Docs/).
 
 ## Contribution
 
