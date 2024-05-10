@@ -3,3 +3,7 @@ vendor/
 bin/main
 data
 frontend/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+.terraform.lock.hcl

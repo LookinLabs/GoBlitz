@@ -51,6 +51,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 
 	// API Handling
 	apiGroup := router.Group(os.Getenv("API_PATH"))
+	apiGroup.Use(CognitoAuth())
 	{
 		apiGroup.GET("/ping", api.StatusOkPingResponse)
 		apiGroup.GET("/users", api.GetUsers)
