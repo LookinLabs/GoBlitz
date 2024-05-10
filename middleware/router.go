@@ -50,8 +50,12 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	})
 
 	// API Handling
+	// If AWS_COGNITO_APP_CLIENT_ID is not set, then the API is open
 	apiGroup := router.Group(os.Getenv("API_PATH"))
-	apiGroup.Use(CognitoAuth())
+	if os.Getenv("PUBLIC_API_ACCESS") != "true" {
+		apiGroup.Use(CognitoAuth())
+	}
+
 	{
 		apiGroup.GET("/ping", api.StatusOkPingResponse)
 		apiGroup.GET("/users", api.GetUsers)

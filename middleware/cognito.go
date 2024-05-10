@@ -28,7 +28,7 @@ func CognitoAuth() gin.HandlerFunc {
 			return
 		}
 		if token == nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "401 Unauthorized Error. Token Not Found."})
 			return
 		}
 
