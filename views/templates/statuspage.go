@@ -57,7 +57,7 @@ func servicesHealthHandler(serviceInfo model.StatusPage) map[string]string {
 	}
 
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", serviceInfo.URL, nil)
+	req, err := http.NewRequest(http.MethodGet, serviceInfo.URL, nil)
 	if err != nil {
 		log.Println("Error creating request:", err)
 		return map[string]string{

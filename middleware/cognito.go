@@ -2,10 +2,8 @@ package middleware
 
 import (
 	"context"
-	"encoding/base64"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"strings"
 
@@ -41,36 +39,6 @@ func CognitoAuth() gin.HandlerFunc {
 
 		c.Next()
 	}
-}
-
-func ExchangeCodeForToken(code string) (*http.Response, error) {
-	tokenUrl := os.Getenv("AWS_COGNITO_TOKEN_URL")
-	urlPrefix := "http://"
-	if os.Getenv("FORCE_TLS") == "true" {
-		urlPrefix = "https://"
-	}
-
-	data := url.Values{}
-	data.Set("grant_type", "authorization_code")
-	data.Set("client_id", os.Getenv("AWS_COGNITO_APP_CLIENT_ID"))
-	data.Set("code", code)
-	data.Set("redirect_uri", urlPrefix+os.Getenv("APP_HOST")+":"+os.Getenv("APP_PORT"))
-
-	req, err := http.NewRequest(http.MethodPost, tokenUrl, strings.NewReader(data.Encode()))
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Add("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(os.Getenv("AWS_COGNITO_APP_CLIENT_ID")+":"+os.Getenv("AWS_COGNITO_APP_CLIENT_SECRET"))))
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, nil
 }
 
 func contains(slice []string, item string) bool {
