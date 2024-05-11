@@ -3,7 +3,6 @@ package sql
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 
 	// Import pq to register the Postgres driver.
@@ -13,11 +12,6 @@ import (
 var DB *sql.DB
 
 func NewDBConnection() error {
-	if os.Getenv("PSQL_ENABLED") != "true" && os.Getenv("APP_ENV") == "development" {
-		log.Println("Warning: PSQL is not enabled. Database queries will fail.")
-		return nil
-	}
-
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_PORT"),

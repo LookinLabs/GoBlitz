@@ -17,7 +17,6 @@ func (suite *TestsSuite) SetupTestEnvironmentals() {
 	os.Setenv("DEBUG_MODE", "true")
 	os.Setenv("API_PATH", "/api/v1/")
 	os.Setenv("FORCE_TLS", "false")
-	os.Setenv("PSQL_ENABLED", "false")
 	os.Setenv("POSTGRES_HOST", "localhost")
 	os.Setenv("POSTGRES_PORT", "5432")
 	os.Setenv("POSTGRES_USER", "postgres")
