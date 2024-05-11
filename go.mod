@@ -1,6 +1,6 @@
 module web
 
-go 1.22.1
+go 1.22.3
 
 require (
 	github.com/jarcoal/httpmock v1.3.1
