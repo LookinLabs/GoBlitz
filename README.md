@@ -44,6 +44,8 @@ Feel free to fork this repository as website boilerplate for your next project.
 
 **Note!** Before getting started, make sure you have `Goose`, `Air`, `Golang CI Lint`, `Gosec` and `Go` installed on your host
 
+**Note!** If you want to use Cognito Authentication for your endpoints, you need to set `PUBLIC_API_ACCESS=false`
+
 1. Clone the repository
 
 ```bash
@@ -63,13 +65,25 @@ cp .env.example .env
 nano .env
 ```
 
-4. Run the application
+4. Run database
 
 ```bash
-make run || go run main.go
+docker-compose up -d db
 ```
 
-5. Visit the application in your browser
+5. Run migrations
+
+```bash
+make migrate-up
+```
+
+6. Run the application
+
+```bash
+make run
+```
+
+7. Visit the application in your browser
 
 Feel free to visit the application at `localhost:8000` and move around available paths
 
