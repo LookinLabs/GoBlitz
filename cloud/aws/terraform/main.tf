@@ -56,8 +56,10 @@ resource "aws_cognito_user_pool_client" "client" {
   callback_urls = ["http://localhost:8000/"]  // Replace with your actual callback URL
   allowed_oauth_flows_user_pool_client = true
   supported_identity_providers = ["COGNITO"]
-}
 
+  // Enable USER_PASSWORD_AUTH flow
+  explicit_auth_flows = ["USER_PASSWORD_AUTH"]
+}
 resource "aws_cognito_user_pool_domain" "cognito-domain" {
   domain       = "goblitz"
   user_pool_id = "${aws_cognito_user_pool.user_pool.id}"

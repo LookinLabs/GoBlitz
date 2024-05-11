@@ -25,7 +25,7 @@ def main():
     user_pool_id = os.getenv('AWS_COGNITO_USER_POOL_ID')
     client_id = os.getenv('AWS_COGNITO_APP_CLIENT_ID')
     username = os.getenv('AWS_COGNITO_API_USER_EMAIL')
-    password = os.getenv('AWS_COGNITO_API_PASS')
+    password = os.getenv('AWS_COGNITO_API_PASSWORD')
 
     # Create Cognito IDP client
     client = boto3.client('cognito-idp', region_name=region)
