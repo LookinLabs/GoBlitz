@@ -9,11 +9,60 @@ import (
 
 	helpers "web/helpers"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func CognitoAuth() gin.HandlerFunc {
+func CognitoJWTSession(router *gin.Engine) {
+	// Secret Key to encrypt the session
+	secretKey := os.Getenv("JWT_SECRET_KEY")
+	if secretKey == "" {
+		log.Fatal("environment JWT_SECRET_KEY must be set")
+		os.Exit(1)
+	}
+
+	store := cookie.NewStore([]byte(secretKey))
+	router.Use(sessions.Sessions("authenticatedSession", store))
+
+	router.GET("/login", func(c *gin.Context) {
+		c.Redirect(http.StatusTemporaryRedirect, os.Getenv("AWS_COGNITO_LOGIN_URL"))
+	})
+
+	router.GET("/callback", func(c *gin.Context) {
+		code := c.Query("code")
+		if code == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "No code provided"})
+			return
+		}
+
+		// Fetch the JWT token
+		token, err := helpers.JWTInjector()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch JWT token"})
+			return
+		}
+
+		// Store the JWT token in the session
+		session := sessions.Default(c)
+		session.Set("jwt", token)
+		session.Save()
+
+		// Redirect to home page after successful authentication
+		c.Redirect(http.StatusTemporaryRedirect, "/")
+	})
+
+	router.Use(func(c *gin.Context) {
+		session := sessions.Default(c)
+		jwt := session.Get("jwt")
+		if jwt != nil {
+			c.Request.Header.Add("Authorization", "Bearer "+jwt.(string))
+		}
+	})
+}
+
+func CognitoValidateJWT() gin.HandlerFunc {
 	awsCognitoAPIUserEmail := os.Getenv("AWS_COGNITO_API_USER_EMAIL")
 	if awsCognitoAPIUserEmail == "" {
 		log.Fatal("environment AWS_COGNITO_API_USER_EMAIL must be set")
@@ -65,7 +114,8 @@ func CognitoAuth() gin.HandlerFunc {
 				return
 			}
 
-			c.Header("Authorization", "Bearer "+newToken)
+			// Send the new token in the response body
+			c.JSON(http.StatusOK, gin.H{"token": newToken})
 			return
 		}
 

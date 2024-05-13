@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/rsa"
 	"encoding/base64"
 	"encoding/json"
@@ -9,18 +10,19 @@ import (
 	"log"
 	"math/big"
 	"net/http"
+	"net/url"
 	"os"
+	"strings"
 	"web/model"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
 	"github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider/types"
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func JWTInjector() gin.HandlerFunc {
+func JWTInjector() (string, error) {
 	awsCognitoAPIUserEmail := os.Getenv("AWS_COGNITO_API_USER_EMAIL")
 	if awsCognitoAPIUserEmail == "" {
 		log.Fatal("environment AWS_COGNITO_API_USER_EMAIL must be set")
@@ -33,21 +35,13 @@ func JWTInjector() gin.HandlerFunc {
 		os.Exit(1)
 	}
 
-	return func(c *gin.Context) {
-		token, err := FetchJWTToken(awsCognitoAPIUserEmail, awsCognitoAPIPassword)
-		if err != nil {
-			fmt.Println("Error fetching JWT token:", err)
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		// Add JWT Token to request
-		c.Request.Header.Add("Authorization", "Bearer "+token)
-
-		// Add JWT Token to response
-		c.Header("Authorization", "JWT")
-		c.Next()
+	token, err := FetchJWTToken(awsCognitoAPIUserEmail, awsCognitoAPIPassword)
+	if err != nil {
+		fmt.Println("Error fetching JWT token:", err)
+		return "", err
 	}
+
+	return token, nil
 }
 
 func FetchJWTToken(username, password string) (string, error) {
@@ -99,6 +93,12 @@ func FetchRefreshToken(refreshToken string) (string, error) {
 		os.Exit(1)
 	}
 
+	awsCognitoUserPoolId := os.Getenv("AWS_COGNITO_USER_POOL_ID")
+	if awsCognitoUserPoolId == "" {
+		log.Fatal("environment AWS_COGNITO_USER_POOL_ID must be set")
+		os.Exit(1)
+	}
+
 	cfg, err := config.LoadDefaultConfig(context.Background(), config.WithRegion(awsRegion))
 	if err != nil {
 		return "", fmt.Errorf("unable to load SDK config, %v", err)
@@ -106,15 +106,16 @@ func FetchRefreshToken(refreshToken string) (string, error) {
 
 	client := cognitoidentityprovider.NewFromConfig(cfg)
 
-	params := &cognitoidentityprovider.InitiateAuthInput{
-		AuthFlow: types.AuthFlowTypeRefreshTokenAuth,
+	params := &cognitoidentityprovider.AdminInitiateAuthInput{
+		AuthFlow: types.AuthFlowTypeRefreshToken,
 		AuthParameters: map[string]string{
 			"REFRESH_TOKEN": refreshToken,
 		},
-		ClientId: aws.String(awsCognitoAppClientId),
+		ClientId:   aws.String(awsCognitoAppClientId),
+		UserPoolId: aws.String(awsCognitoUserPoolId),
 	}
 
-	resp, err := client.InitiateAuth(context.Background(), params)
+	resp, err := client.AdminInitiateAuth(context.Background(), params)
 	if err != nil {
 		return "", fmt.Errorf("failed to fetch the refresh token: %v", err)
 	}
@@ -176,4 +177,58 @@ func ParseRSAKeys(token *jwt.Token) (interface{}, error) {
 	}
 
 	return nil, fmt.Errorf("unable to find appropriate key")
+}
+
+func GenerateSecretKey() ([]byte, error) {
+	// Generate a random secret key
+	key := make([]byte, 32)
+	_, err := rand.Read(key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate secret key: %v", err)
+	}
+	return key, nil
+}
+
+func ExchangeCodeForToken(code string) (string, error) {
+	awsRegion := os.Getenv("AWS_REGION")
+	awsCognitoAppClientId := os.Getenv("AWS_COGNITO_APP_CLIENT_ID")
+	awsCognitoRedirectUrl := os.Getenv("APP_HOST") + ":" + os.Getenv("APP_PORT") + "/callback"
+
+	if awsRegion == "" || awsCognitoAppClientId == "" || awsCognitoRedirectUrl == "" {
+		log.Fatal("environment variables AWS_REGION, AWS_COGNITO_APP_CLIENT_ID, and AWS_COGNITO_LOGIN_URL must be set")
+		os.Exit(1)
+	}
+
+	tokenEndpoint := fmt.Sprintf("https://cognito-idp.%s.amazonaws.com/%s/oauth2/token", awsRegion, awsCognitoAppClientId)
+
+	data := url.Values{}
+	data.Set("grant_type", "authorization_code")
+	data.Set("client_id", awsCognitoAppClientId)
+	data.Set("code", code)
+	data.Set("redirect_uri", awsCognitoRedirectUrl)
+
+	req, err := http.NewRequest(http.MethodPost, tokenEndpoint, strings.NewReader(data.Encode()))
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %v", err)
+	}
+
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to exchange code for token: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("failed to exchange code for token, status: %d", resp.StatusCode)
+	}
+
+	var result map[string]interface{}
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return "", fmt.Errorf("failed to decode response: %v", err)
+	}
+
+	return result["id_token"].(string), nil
 }

@@ -47,9 +47,6 @@ func StatusPageResponse() gin.HandlerFunc {
 
 func servicesHealthHandler(serviceInfo model.StatusPage) map[string]string {
 	req, err := http.NewRequest(http.MethodGet, serviceInfo.URL, nil)
-	helpers.JWTInjector()
-
-	client := &http.Client{}
 	if err != nil {
 		log.Println("Error creating request:", err)
 		return map[string]string{
@@ -58,6 +55,14 @@ func servicesHealthHandler(serviceInfo model.StatusPage) map[string]string {
 		}
 	}
 
+	token, err := helpers.JWTInjector()
+	if err != nil {
+		log.Println("Error fetching JWT token:", err)
+	} else {
+		req.Header.Add("Authorization", "Bearer "+token)
+	}
+
+	client := &http.Client{}
 	resp, err := client.Do(req)
 
 	service := map[string]string{

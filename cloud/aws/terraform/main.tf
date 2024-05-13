@@ -48,12 +48,14 @@ resource "aws_cognito_user_pool_client" "client" {
 
   user_pool_id = aws_cognito_user_pool.user_pool.id
   generate_secret = false
-  refresh_token_validity = 90
+  id_token_validity = 5
+  access_token_validity = 5
+  refresh_token_validity = 60
   prevent_user_existence_errors = "ENABLED"
 
   allowed_oauth_flows = ["code", "implicit"]
   allowed_oauth_scopes = ["email", "openid"]
-  callback_urls = ["http://localhost:8000/"]  // Replace with your actual callback URL
+  callback_urls = ["http://localhost:8000/callback"]
   allowed_oauth_flows_user_pool_client = true
   supported_identity_providers = ["COGNITO"]
 
