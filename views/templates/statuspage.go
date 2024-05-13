@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"web/helpers"
 	model "web/model"
 
 	"github.com/gin-gonic/gin"
@@ -46,19 +47,7 @@ func StatusPageResponse() gin.HandlerFunc {
 
 func servicesHealthHandler(serviceInfo model.StatusPage) map[string]string {
 	req, err := http.NewRequest(http.MethodGet, serviceInfo.URL, nil)
-	if os.Getenv("API_PUBLIC_ACCESS") != "true" {
-		token := os.Getenv("AWS_COGNITO_JWT_TOKEN")
-		if token == "" {
-			log.Println("AWS_COGNITO_JWT_TOKEN is not set")
-			log.Println("Please set the environment variable AWS_COGNITO_JWT_TOKEN")
-
-			return map[string]string{
-				"name":   serviceInfo.Name,
-				"status": "down",
-			}
-		}
-		req.Header.Add("Authorization", "Bearer "+token)
-	}
+	helpers.JWTInjector()
 
 	client := &http.Client{}
 	if err != nil {

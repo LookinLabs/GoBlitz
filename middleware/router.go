@@ -5,6 +5,7 @@ import (
 	"os"
 	"web/controller/api"
 	errorController "web/controller/error"
+	helpers "web/helpers"
 	httpTemplates "web/views/templates"
 
 	"github.com/gin-contrib/static"
@@ -50,10 +51,11 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	})
 
 	// API Handling
-	// If AWS_COGNITO_APP_CLIENT_ID is not set, then the API is open
+	// If PUBLIC_API_ACCESS is not set, then the API is without JWT
 	apiGroup := router.Group(os.Getenv("API_PATH"))
 	if os.Getenv("PUBLIC_API_ACCESS") != "true" {
-		apiGroup.Use(CognitoAuth())
+		apiGroup.Use(helpers.JWTInjector()) // Fetch & Inject JWT Token into Header
+		apiGroup.Use(CognitoAuth())         // Validate the JWT Token with Cognito
 	}
 
 	{
