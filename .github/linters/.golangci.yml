@@ -1,0 +1,61 @@
+run:
+  # Default concurrency is an available CPU number
+  concurrency: 4
+
+  # Timeout for analysis, e.g. 30s, 5m, default is 1m
+  deadline: 5m
+
+  # Include test files or not, default is true
+  tests: true
+
+# Settings of specific linters
+linters-settings:
+  gocyclo:
+    min-complexity: 20
+
+linters:
+  # do not use `enable-all`: it's deprecated and will be removed soon.
+  disable-all: true
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - dogsled
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - execinquery
+    - exportloopref
+    - forbidigo
+    - gocognit
+    - goconst
+    - gocritic
+    - godox
+    - gofmt
+    - gofumpt
+    - goimports
+    - goprintffuncname
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - nakedret
+    - nestif
+    - nilerr
+    - nonamedreturns
+    - prealloc
+    - predeclared
+    - revive
+    - staticcheck
+    - stylecheck
+    - tenv
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - whitespace
+
+issues:
+  max-same-issues: 0

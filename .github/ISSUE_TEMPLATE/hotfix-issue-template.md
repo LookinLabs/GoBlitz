@@ -1,14 +1,14 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: "[BUG] YOUR_TITLE"
-labels: bug
+name: Hotfix issue template
+about: Describe this issue template's purpose here.
+title: "[HOTFIX] YOUR_TITLE"
+labels: hotfix
 assignees: ''
 
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what to fix.
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -19,9 +19,6 @@ Steps to reproduce the behavior:
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
-
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
 
 **Device (please complete the following information):**
  - Device: [e.g. Mac, iPhone]

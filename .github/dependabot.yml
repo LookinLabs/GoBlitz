@@ -1,8 +1,13 @@
+# Basic set up for three package managers
 version: 2
 updates:
+  # Maintain dependencies for Composer
   - package-ecosystem: "gomod"
-    directory: "/"
-    schedule:
-      interval: "monthly"
+    directory: "./"
     reviewers:
       - "KostLinux"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: '[Go Modules]'
+      include: scope

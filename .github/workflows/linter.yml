@@ -1,0 +1,64 @@
+name: Build
+on:
+  pull_request:
+    types:
+        - opened
+        - edited
+        - closed
+    branches:
+        - main
+
+permissions:
+    contents: read
+    packages: read
+    statuses: write
+    pull-requests: write
+
+jobs:
+    read_changes:
+        runs-on: ubuntu-latest
+        outputs:
+          go: ${{ steps.changes.outputs.go }}
+          src: ${{ steps.changes.outputs.src }}
+        steps:
+        - uses: actions/checkout@v4
+
+        - uses: dorny/paths-filter@v2
+          id: changes
+          with:
+            filters: |
+              go:
+                - 'main.go'
+                - 'go.mod'
+                - 'controller/**'
+                - 'middleware/**'
+                - 'model/**'
+                - 'repository/**'
+                - 'service/**'
+              src:
+                - '.github/**'
+                - 'doc/**'
+                
+    golangci:
+      needs: read_changes
+      if: needs.read_changes.outputs.go == 'true'
+      name: Lint Backend
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+
+        - uses: actions/setup-go@v4
+          with:
+            go-version: '1.21'
+            cache: false
+
+        - name: golangci-lint
+          uses: golangci/golangci-lint-action@v3
+          with:
+            version: v1.54
+            working-directory: ./
+            args: --timeout=30m --config=./.golangci.yml --issues-exit-code=0
+            only-new-issues: true
+            skip-cache: true
+            skip-pkg-cache: true
+    
