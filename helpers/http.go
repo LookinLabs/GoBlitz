@@ -10,7 +10,6 @@ import (
 )
 
 func ServePageAssets(router *gin.Engine) {
-
 	if CheckFileExists("./public/index.html") {
 		router.Use(static.Serve("/assets", static.LocalFile("./public/assets", true)))
 	} else {
