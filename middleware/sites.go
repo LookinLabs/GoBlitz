@@ -22,9 +22,3 @@ func WelcomePageMiddleware() gin.HandlerFunc {
 		c.HTML(http.StatusOK, "welcome.html", gin.H{})
 	}
 }
-
-func DocumentationPageMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.HTML(http.StatusOK, "docs.html", gin.H{})
-	}
-}
