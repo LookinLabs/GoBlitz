@@ -19,14 +19,14 @@ func ServePageAssets(router *gin.Engine) {
 }
 
 func assetsPerPage(router *gin.Engine) {
-	dirs, err := os.ReadDir("./views")
+	assetsDir, err := os.ReadDir("./views")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, dir := range dirs {
-		if dir.IsDir() && strings.Contains(dir.Name(), "_page") {
-			router.Use(static.Serve("/"+dir.Name()+"/assets", static.LocalFile("./views/"+dir.Name()+"/assets", true)))
+	for _, directory := range assetsDir {
+		if directory.IsDir() && strings.Contains(directory.Name(), "_page") {
+			router.Use(static.Serve("/"+directory.Name()+"/assets", static.LocalFile("./views/"+directory.Name()+"/assets", true)))
 		}
 	}
 }

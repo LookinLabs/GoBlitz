@@ -37,6 +37,8 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	})
 
 	// Frontend & Static Files Handling
+	router.LoadHTMLGlob("./views/**/*.html")
+
 	router.Use(static.Serve("/assets", static.LocalFile("./public/assets", true)))
 	if helper.CheckFileNotExists("./public/index.html") {
 		router.GET("/", WelcomePageMiddleware())
@@ -49,16 +51,15 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 
 	helper.ServePageAssets(router)
 
+	// HTML Template generated pages
+	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
+
 	// API Handling
 	apiGroup := router.Group(os.Getenv("API_PATH"))
 	{
 		apiGroup.GET("/ping", api.StatusOkPingResponse)
 		apiGroup.GET("/users", api.GetUsers)
 	}
-
-	// HTML Templates (e.g Status page)
-	router.LoadHTMLGlob("./views/**/*.html")
-	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
 
 	// Error handling
 	router.NoRoute(errorController.StatusNotFound)
