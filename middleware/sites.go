@@ -9,9 +9,9 @@ import (
 // StatusPageMiddleware handles the status page
 func StatusPageMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		statuses := c.MustGet("statuses").([]map[string]string)
+		status := c.MustGet("statuses").([]map[string]string)
 		c.HTML(http.StatusOK, "status.html", gin.H{
-			"services": statuses,
+			"services": status,
 		})
 	}
 }
@@ -26,11 +26,5 @@ func WelcomePageMiddleware() gin.HandlerFunc {
 func LoginPageMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.HTML(http.StatusOK, "login.html", gin.H{})
-	}
-}
-
-func DocumentationPageMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.HTML(http.StatusOK, "docs.html", gin.H{})
 	}
 }

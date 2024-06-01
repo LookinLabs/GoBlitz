@@ -63,13 +63,25 @@ cp .env.example .env
 nano .env
 ```
 
-4. Run the application
+4. Setup the database
 
 ```bash
-make run || go run main.go
+docker-compose up -d db
 ```
 
-5. Visit the application in your browser
+5. Run the migrations
+
+```bash
+make migrate-up
+```
+
+6. Run the application
+
+```bash
+make run
+```
+
+7. Visit the application in your browser
 
 Feel free to visit the application at `localhost:8000` and move around available paths
 

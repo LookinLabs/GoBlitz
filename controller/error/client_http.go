@@ -1,4 +1,4 @@
-package ctrlerror
+package httperr
 
 import (
 	"io"
@@ -17,7 +17,9 @@ func StatusNotFound(c *gin.Context) {
 		log.Printf("error opening file: %v", err)
 		return
 	}
+
 	defer file.Close()
+
 	if _, err := io.Copy(c.Writer, file); err != nil {
 		if err := c.Error(err); err != nil {
 			log.Printf("error adding error to Gin context: %v", err)
