@@ -4,8 +4,11 @@ import (
 	"log"
 	"os"
 	"web/middleware"
+	"web/model"
 	db "web/repository/db"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/memstore"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -20,11 +23,15 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	if err := db.NewDBConnection(); err != nil {
+	var err error
+	model.DB, err = db.NewDBConnection()
+	if err != nil {
 		log.Fatalf("failed to establish database connection: %v", err)
 	}
 
 	router := gin.New()
+	store := memstore.NewStore([]byte("secret"))
+	router.Use(sessions.Sessions("session", store))
 	httpRouter := middleware.NewRouter(router)
 
 	if err := httpRouter.Run(":" + os.Getenv("APP_PORT")); err != nil {

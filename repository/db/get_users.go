@@ -6,7 +6,7 @@ import (
 
 func GetUsers() ([]model.User, error) {
 	var users []model.User
-	result := DB.Find(&users)
+	result := model.DB.Find(&users)
 	if result.Error != nil {
 		return nil, result.Error
 	}

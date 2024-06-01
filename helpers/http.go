@@ -11,22 +11,28 @@ import (
 
 func ServePageAssets(router *gin.Engine) {
 	if CheckFileExists("./public/index.html") {
-		router.Use(static.Serve("/assets", static.LocalFile("./public/assets", true)))
+		router.Use(static.Serve("/assets", static.LocalFile("./public/assets", false)))
 	} else {
-		router.Use(static.Serve("/assets", static.LocalFile("./views/assets", true)))
+		router.Use(static.Serve("/assets", static.LocalFile("./views/assets", false)))
 		assetsPerPage(router)
 	}
 }
 
 func assetsPerPage(router *gin.Engine) {
-	assetsDir, err := os.ReadDir("./views")
+	views, err := os.ReadDir("./views")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, directory := range assetsDir {
+	for _, directory := range views {
 		if directory.IsDir() && strings.Contains(directory.Name(), "_page") {
-			router.Use(static.Serve("/"+directory.Name()+"/assets", static.LocalFile("./views/"+directory.Name()+"/assets", true)))
+			assetsPath := "./views/" + directory.Name() + "/assets"
+			if CheckFileNotExists(assetsPath) {
+				continue
+			}
+
+			// Serve page-specific assets
+			router.Use(static.Serve("/"+directory.Name()+"/assets", static.LocalFile(assetsPath, false)))
 		}
 	}
 }

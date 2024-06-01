@@ -53,18 +53,19 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 
 	// HTML Template generated pages
 	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
+	router.GET("/login", LoginPageMiddleware())
+
+	// Authentication
+	router.POST("/signup", api.Signup)
+	router.POST("/signin", api.Signin)
+	router.GET("/signout", api.Signout)
 
 	// API Handling
-	apiGroup := router.Group(os.Getenv("API_PATH"))
+	apiGroup := router.Group(os.Getenv("API_PATH"), Authentication())
 	{
 		apiGroup.GET("/ping", api.StatusOkPingResponse)
 		apiGroup.GET("/users", api.GetUsers)
 	}
-
-	// HTML Templates (e.g Status page)
-	router.LoadHTMLGlob("./views/**/*")
-	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
-	router.GET("/login", LoginPageMiddleware())
 
 	// Error handling
 	router.NoRoute(errorController.StatusNotFound)

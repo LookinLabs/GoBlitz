@@ -46,7 +46,11 @@ func StatusPageResponse() gin.HandlerFunc {
 }
 
 func servicesHealthHandler(serviceInfo model.StatusPage) map[string]string {
-	resp, err := http.Get(serviceInfo.URL)
+	client := &http.Client{}
+	req, _ := http.NewRequest(http.MethodGet, serviceInfo.URL, nil)
+	req.Header.Add("X-API-Key", os.Getenv("STATUSPAGE_API_KEY"))
+
+	resp, err := client.Do(req)
 
 	service := map[string]string{
 		"name":   serviceInfo.Name,
