@@ -22,5 +22,5 @@ func main() {
 		log.Fatalf("Failed to generate API key: %v", err)
 	}
 
-	log.Println(apiKey)
+	log.Println("Output:" + apiKey)
 }
