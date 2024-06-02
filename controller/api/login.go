@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	helper "web/helpers"
 	"web/model"
 
 	"github.com/gin-contrib/sessions"
@@ -23,7 +24,7 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	if !model.CheckUserExistance(data.Email) {
+	if model.CheckUserExistance(data.Email) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User already exists"})
 		return
 	}
@@ -34,10 +35,8 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	session := sessions.Default(c)
-	session.Set("userID", user.ID)
-	if err := session.Save(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
+	err := helper.SetSession(c, user.ID)
+	if err != nil {
 		return
 	}
 	c.Redirect(http.StatusFound, os.Getenv("API_PATH")+"ping")
@@ -56,10 +55,8 @@ func Signin(c *gin.Context) {
 		return
 	}
 
-	session := sessions.Default(c)
-	session.Set("userID", user.ID)
-	if err := session.Save(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
+	err := helper.SetSession(c, user.ID)
+	if err != nil {
 		return
 	}
 	c.Redirect(http.StatusFound, os.Getenv("API_PATH")+"ping")

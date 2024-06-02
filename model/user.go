@@ -22,14 +22,14 @@ func CheckUserExistance(email string) bool {
 	var user User
 
 	if err := DB.Where("email = ?", email).First(&user).Error; err == nil {
-		return false
+		return true
 	}
 
 	if err := DB.Where("username = ?", email).First(&user).Error; err == nil {
-		return false
+		return true
 	}
 
-	return true
+	return false
 }
 
 func CreateUser(email, username, password string) *User {

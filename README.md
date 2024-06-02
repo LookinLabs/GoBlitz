@@ -60,7 +60,6 @@ cd my-web-application
 
 ```bash
 cp .env.example .env
-nano .env
 ```
 
 4. Setup the database
@@ -75,13 +74,21 @@ docker-compose up -d db
 make migrate-up
 ```
 
-6. Run the application
+6. Generate `STATUSPAGE_API_KEY`
+
+```
+python3 bin/api/generate_api_key.py
+```
+
+7. Paste the generated key into the `.env` file into the `STATUSPAGE_API_KEY` variable
+
+8. Run the application
 
 ```bash
 make run
 ```
 
-7. Visit the application in your browser
+9. Visit the application in your browser
 
 Feel free to visit the application at `localhost:8000` and move around available paths
 
