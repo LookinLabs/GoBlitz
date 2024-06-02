@@ -22,7 +22,6 @@ func Authentication() gin.HandlerFunc {
 				ctx.AbortWithStatus(http.StatusUnauthorized)
 				return
 			}
-
 		} else {
 			userID := sessionID.(uint)
 
