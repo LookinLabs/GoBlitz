@@ -23,8 +23,8 @@ func WelcomePageMiddleware() gin.HandlerFunc {
 	}
 }
 
-func LoginPageMiddleware() gin.HandlerFunc {
+func ConsolePageMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.HTML(http.StatusOK, "login.html", gin.H{})
+		c.HTML(http.StatusOK, "console.html", gin.H{})
 	}
 }

@@ -44,6 +44,11 @@ func CreateUser(email, username, password string) *User {
 		Password: encryptedPassword,
 	}
 	DB.Create(&user)
+	if user.ID == 0 {
+		log.Fatalf("Failed to create user: %v", user)
+	}
+
+	log.Printf("User created: %v", user)
 	return &user
 }
 

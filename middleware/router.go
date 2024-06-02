@@ -53,7 +53,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 
 	// HTML Template generated pages
 	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
-	router.GET("/login", LoginPageMiddleware())
+	router.GET("/console", ConsolePageMiddleware())
 
 	// Authentication
 	router.POST("/signup", api.Signup)
