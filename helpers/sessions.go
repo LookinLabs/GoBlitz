@@ -16,3 +16,9 @@ func SetSession(c *gin.Context, userID uint) error {
 	}
 	return nil
 }
+
+func IsUserAuthenticated(c *gin.Context) bool {
+	session := sessions.Default(c)
+	userID := session.Get("userID")
+	return userID != nil
+}
