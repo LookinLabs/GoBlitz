@@ -54,13 +54,13 @@ func Signin(c *gin.Context) {
 		return
 	}
 
-	user := model.CheckPasswordMatch(data.Username, data.Password)
-	if user.ID == 0 {
-		c.Render(http.StatusUnauthorized, render.Data{})
+	user, err := model.CheckPasswordMatch(data.Username, data.Password)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	err := helper.SetSession(c, user.ID)
+	err = helper.SetSession(c, user.ID)
 	if err != nil {
 		return
 	}

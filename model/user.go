@@ -47,18 +47,18 @@ func CreateUser(email, username, password string) *User {
 	return &user
 }
 
-func CheckPasswordMatch(username, password string) *User {
+func CheckPasswordMatch(username, password string) (*User, error) {
 	var user User
 	DB.Where("username = ?", username).First(&user)
 	if user.ID == 0 {
-		return &user
+		return nil, errors.New("invalid username")
 	}
 
 	err := helper.CheckPasswordMatch(user.Password, password)
 	if err != nil {
-		return &User{}
+		return nil, errors.New("invalid password")
 	}
-	return &user
+	return &user, nil
 }
 
 func GetUserByID(userID uint) (User, error) {
