@@ -40,7 +40,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	router.LoadHTMLGlob("./views/**/*.html")
 
 	router.Use(static.Serve("/assets", static.LocalFile("./public/assets", true)))
-	if helper.CheckFileNotExists("./public/index.html") {
+	if !helper.CheckIfFileExists("./public/index.html") {
 		router.GET("/", WelcomePageMiddleware())
 		router.GET("/favicon.ico", func(c *gin.Context) {
 			c.String(http.StatusNoContent, "")

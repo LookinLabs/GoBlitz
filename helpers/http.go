@@ -10,8 +10,8 @@ import (
 )
 
 func ServePageAssets(router *gin.Engine) {
-	if CheckFileExists("./public/index.html") {
-		router.Use(static.Serve("/assets", static.LocalFile("./public/assets", false)))
+	if CheckIfFileExists("./public/index.html") {
+		router.Use(static.Serve("/assets", static.LocalFile("./public/assets", true)))
 	} else {
 		router.Use(static.Serve("/assets", static.LocalFile("./views/assets", false)))
 		assetsPerPage(router)
