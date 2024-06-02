@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 	helper "web/helpers"
-	"web/model"
+	sql "web/repository/db"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -17,62 +17,83 @@ type loginFormData struct {
 	Password string `form:"password"`
 }
 
-func Signup(c *gin.Context) {
+func SignUp(ctx *gin.Context) {
 	var data loginFormData
-	if err := c.Bind(&data); err != nil {
-		c.Render(http.StatusBadRequest, render.Data{})
+	if err := ctx.Bind(&data); err != nil {
+		ctx.Render(http.StatusBadRequest, render.Data{})
 		return
 	}
 
-	if model.CheckUserExistance(data.Email) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User already exists"})
+	checks := []helper.Check{
+		helper.NewCheck(checkUsernameExists(data.Username), "User already exists", false),
+		helper.NewCheck(checkEmailExists(data.Email), "Email already exists", false),
+	}
+
+	if helper.CheckAndRespond(ctx, checks) {
 		return
 	}
 
-	user := model.CreateUser(data.Email, data.Username, data.Password)
+	user := sql.CreateUser(data.Email, data.Username, data.Password)
 	if user == nil || user.ID == 0 {
-		c.Render(http.StatusBadRequest, render.Data{})
+		ctx.Render(http.StatusBadRequest, render.Data{})
 		return
 	}
 
-	err := helper.SetSession(c, user.ID)
-	if err != nil {
+	if err := helper.SetSession(ctx, user.ID); err != nil {
 		return
 	}
-	c.Redirect(http.StatusFound, os.Getenv("API_PATH")+"ping")
+
+	ctx.Redirect(http.StatusFound, os.Getenv("API_PATH")+"ping")
 }
 
-func Signin(c *gin.Context) {
+func SignIn(ctx *gin.Context) {
 	var data loginFormData
-	if err := c.Bind(&data); err != nil {
-		c.Render(http.StatusBadRequest, render.Data{})
+	if err := ctx.Bind(&data); err != nil {
+		ctx.Render(http.StatusBadRequest, render.Data{})
 		return
 	}
 
-	if !model.CheckUserExistance(data.Username) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User does not exists"})
+	checks := []helper.Check{
+		helper.NewCheck(checkUsernameExists(data.Username), "User does not exist", true),
+	}
+
+	if helper.CheckAndRespond(ctx, checks) {
 		return
 	}
 
-	user, err := model.CheckPasswordMatch(data.Username, data.Password)
+	user, err := sql.CheckPasswordMatch(data.Username, data.Password)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = helper.SetSession(c, user.ID)
-	if err != nil {
+	if err := helper.SetSession(ctx, user.ID); err != nil {
 		return
 	}
-	c.Redirect(http.StatusFound, os.Getenv("API_PATH")+"ping")
+
+	ctx.Redirect(http.StatusFound, os.Getenv("API_PATH")+"ping")
 }
 
-func Signout(c *gin.Context) {
-	session := sessions.Default(c)
+func SignOut(ctx *gin.Context) {
+	session := sessions.Default(ctx)
 	session.Clear()
+
 	if err := session.Save(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
 		return
 	}
-	c.Redirect(http.StatusFound, "/")
+
+	ctx.Redirect(http.StatusFound, "/")
+}
+
+func checkUsernameExists(username string) helper.CheckFunc {
+	return func() (bool, error) {
+		return sql.CheckUserExistenceByUsername(username)
+	}
+}
+
+func checkEmailExists(email string) helper.CheckFunc {
+	return func() (bool, error) {
+		return sql.CheckUserExistenceByEmail(email)
+	}
 }

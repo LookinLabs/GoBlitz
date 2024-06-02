@@ -7,18 +7,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetSession(c *gin.Context, userID uint) error {
-	session := sessions.Default(c)
+func SetSession(ctx *gin.Context, userID uint) error {
+	session := sessions.Default(ctx)
 	session.Set("userID", userID)
+
 	if err := session.Save(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
 		return err
 	}
+
 	return nil
 }
 
-func IsUserAuthenticated(c *gin.Context) bool {
-	session := sessions.Default(c)
+func IsUserAuthenticated(ctx *gin.Context) bool {
+	session := sessions.Default(ctx)
 	userID := session.Get("userID")
+
 	return userID != nil
 }

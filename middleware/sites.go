@@ -24,14 +24,14 @@ func WelcomePageMiddleware() gin.HandlerFunc {
 	}
 }
 
-func ConsolePageMiddleware() gin.HandlerFunc {
+func LoginPageMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if helper.IsUserAuthenticated(c) {
 			// If user is authenticated, serve the logout page
-			c.HTML(http.StatusOK, "logout.html", gin.H{})
+			c.HTML(http.StatusOK, "authenticated.html", gin.H{})
 		} else {
-			// If user is not authenticated, serve the console page
-			c.HTML(http.StatusOK, "console.html", gin.H{})
+			// If user is not authenticated, serve the authenticate page
+			c.HTML(http.StatusOK, "login.html", gin.H{})
 		}
 	}
 }

@@ -27,12 +27,9 @@ func assetsPerPage(router *gin.Engine) {
 	for _, directory := range views {
 		if directory.IsDir() && strings.Contains(directory.Name(), "_page") {
 			assetsPath := "./views/" + directory.Name() + "/assets"
-			if !CheckIfFileExists(assetsPath) {
-				continue
+			if CheckIfFileExists(assetsPath) {
+				router.Use(static.Serve("/"+directory.Name()+"/assets", static.LocalFile(assetsPath, false)))
 			}
-
-			// Serve page-specific assets
-			router.Use(static.Serve("/"+directory.Name()+"/assets", static.LocalFile(assetsPath, false)))
 		}
 	}
 }

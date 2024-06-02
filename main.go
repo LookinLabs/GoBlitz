@@ -4,8 +4,7 @@ import (
 	"log"
 	"os"
 	"web/middleware"
-	"web/model"
-	db "web/repository/db"
+	sql "web/repository/db"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/memstore"
@@ -24,7 +23,7 @@ func main() {
 	}
 
 	var err error
-	model.DB, err = db.NewDBConnection()
+	sql.DB, err = sql.NewDBConnection()
 	if err != nil {
 		log.Fatalf("failed to establish database connection: %v", err)
 	}

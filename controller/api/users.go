@@ -9,7 +9,7 @@ import (
 )
 
 func GetUsers(c *gin.Context) {
-	users, err := sql.GetUsers()
+	users, err := sql.GetUser()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 	"os"
-	"web/model"
+	sql "web/repository/db"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -24,7 +24,7 @@ func Authentication() gin.HandlerFunc {
 			}
 		} else {
 			userID := sessionID.(uint)
-			user, err := model.GetUserByID(userID)
+			user, err := sql.GetUserByID(userID)
 			if err != nil {
 				c.AbortWithStatus(http.StatusUnauthorized)
 				return
