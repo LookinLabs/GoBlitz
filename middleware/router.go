@@ -5,6 +5,7 @@ import (
 	"os"
 	"web/controller/api"
 	errorController "web/controller/error"
+	helper "web/helpers"
 	httpTemplates "web/views/templates"
 
 	"github.com/gin-contrib/static"
@@ -35,19 +36,23 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 		c.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
 	})
 
-	if _, err := os.Stat("./public/index.html"); os.IsNotExist(err) {
-		// Load welcome page from html template
+	// Frontend & Static Files Handling
+	router.LoadHTMLGlob("./views/**/*.html")
+
+	router.Use(static.Serve("/assets", static.LocalFile("./public/assets", true)))
+	if !helper.CheckIfFileExists("./public/index.html") {
 		router.GET("/", WelcomePageMiddleware())
+		router.GET("/favicon.ico", func(c *gin.Context) {
+			c.String(http.StatusNoContent, "")
+		})
 	} else {
-		// Handle static files from the public folder
 		router.Use(static.Serve("/", static.LocalFile("./public/", true)))
 	}
 
-	// Serve static assets
-	router.Use(static.Serve("/assets", static.LocalFile("./public/assets", true)))
-	router.GET("/favicon.ico", func(c *gin.Context) {
-		c.String(http.StatusNoContent, "")
-	})
+	helper.ServePageAssets(router)
+
+	// HTML Template generated pages
+	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
 
 	// API Handling
 	apiGroup := router.Group(os.Getenv("API_PATH"))
@@ -55,11 +60,6 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 		apiGroup.GET("/ping", api.StatusOkPingResponse)
 		apiGroup.GET("/users", api.GetUsers)
 	}
-
-	// HTML Templates (e.g Status page)
-	router.LoadHTMLGlob("./views/**/*")
-	router.GET("/status", httpTemplates.StatusPageResponse(), StatusPageMiddleware())
-	router.GET("/docs", DocumentationPageMiddleware())
 
 	// Error handling
 	router.NoRoute(errorController.StatusNotFound)
