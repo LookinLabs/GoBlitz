@@ -49,6 +49,11 @@ func Signin(c *gin.Context) {
 		return
 	}
 
+	if !model.CheckUserExistance(data.Username) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User does not exists"})
+		return
+	}
+
 	user := model.CheckPasswordMatch(data.Username, data.Password)
 	if user.ID == 0 {
 		c.Render(http.StatusUnauthorized, render.Data{})
