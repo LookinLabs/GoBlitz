@@ -27,7 +27,7 @@ func assetsPerPage(router *gin.Engine) {
 	for _, directory := range views {
 		if directory.IsDir() && strings.Contains(directory.Name(), "_page") {
 			assetsPath := "./views/" + directory.Name() + "/assets"
-			if CheckFileNotExists(assetsPath) {
+			if !CheckIfFileExists(assetsPath) {
 				continue
 			}
 
