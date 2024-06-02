@@ -11,7 +11,7 @@ import (
 
 var DB *gorm.DB
 
-func GetUser() (model.User, error) {
+func GetUsers() (model.User, error) {
 	var user model.User
 
 	transaction := DB.First(&user)

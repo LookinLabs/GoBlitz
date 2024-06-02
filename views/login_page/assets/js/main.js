@@ -37,6 +37,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
         });
     });
+
+    // Handle sign-out button click
+    const signOutForm = document.querySelector('form[action="/sign-out"]');
+    signOutForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Submit form using Fetch
+        fetch(signOutForm.action, {
+            method: 'POST',
+            credentials: 'same-origin'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Sign out failed');
+            }
+            // Redirect on successful response
+            window.location.href = '/';
+        })
+        .catch(error => {
+            // Handle network error
+            showBanner('Network error', 'error');
+        });
+    });
 });
 
 function showBanner(message, type) {

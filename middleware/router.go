@@ -58,7 +58,7 @@ func NewRouter(router *gin.Engine) *gin.Engine {
 	// Authentication
 	router.POST("/sign-up", api.SignUp)
 	router.POST("/sign-in", api.SignIn)
-	router.GET("/sign-out", api.SignOut)
+	router.POST("/sign-out", api.SignOut)
 
 	// API Handling
 	apiGroup := router.Group(os.Getenv("API_PATH"), Authentication())
