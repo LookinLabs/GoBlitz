@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="stylesheet" href="/login_page/assets/css/main.css">
+</head>
+<body class="flex flex-col min-h-screen bg-gradient-to-r from-teal-600 via-blue-400 to-teal-600 text-white">
+    {{template "header.html"}}
+    <section class="flex-grow flex items-center justify-center">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col items-center">
+            <div class="flex justify-center gap-4 mb-4">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Users</button>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ping</button>
+            </div>
+            <form action="/sign-out" method="POST">
+                <input type="submit" value="Logout" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            </form>
+        </div>
+    </section>
+</body>
+</html>

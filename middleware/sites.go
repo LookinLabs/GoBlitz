@@ -3,6 +3,8 @@ package middleware
 import (
 	"net/http"
 
+	helper "web/helpers"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,5 +22,17 @@ func StatusPageMiddleware() gin.HandlerFunc {
 func WelcomePageMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.HTML(http.StatusOK, "welcome.html", gin.H{})
+	}
+}
+
+func LoginPageMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		if helper.IsUserAuthenticated(ctx) {
+			// If user is authenticated, serve the logout page
+			ctx.HTML(http.StatusOK, "authenticated.html", gin.H{})
+		} else {
+			// If user is not authenticated, serve the authenticate page
+			ctx.HTML(http.StatusOK, "login.html", gin.H{})
+		}
 	}
 }

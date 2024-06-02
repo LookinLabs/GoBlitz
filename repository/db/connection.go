@@ -3,14 +3,13 @@ package sql
 import (
 	"fmt"
 	"os"
+	"web/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
-func NewDBConnection() error {
+func NewDBConnection() (*gorm.DB, error) {
 	dbConnAttrs := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_PORT"),
@@ -21,10 +20,12 @@ func NewDBConnection() error {
 
 	db, err := gorm.Open(postgres.Open(dbConnAttrs), &gorm.Config{})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	// assign the *gorm.DB instance to DB
-	DB = db
-	return nil
+	if db.AutoMigrate(&model.User{}) != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
