@@ -31,7 +31,6 @@ func GetUserByID(userID uint) (model.User, error) {
 
 	transaction := DB.First(&user, userID)
 	if transaction.Error != nil {
-
 		if errors.Is(transaction.Error, gorm.ErrRecordNotFound) {
 			return model.User{}, errors.New("user not found")
 		}
@@ -47,7 +46,6 @@ func GetUserIDByUsername(username string) (uint, error) {
 
 	transaction := DB.Where("username = ?", username).First(&user)
 	if transaction.Error != nil {
-
 		if errors.Is(transaction.Error, gorm.ErrRecordNotFound) {
 			return 0, errors.New("user not found")
 		}
@@ -63,7 +61,6 @@ func CheckUserExistenceByEmail(email string) (bool, error) {
 
 	transaction := DB.Where("email = ?", email).First(&user)
 	if transaction.Error != nil {
-
 		if errors.Is(transaction.Error, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
@@ -79,7 +76,6 @@ func CheckUserExistenceByUsername(username string) (bool, error) {
 
 	transaction := DB.Where("username = ?", username).First(&user)
 	if transaction.Error != nil {
-
 		if errors.Is(transaction.Error, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
@@ -95,7 +91,6 @@ func CheckPasswordMatch(username, password string) (*model.User, error) {
 
 	transaction := DB.Where("username = ?", username).First(&user)
 	if transaction.Error != nil {
-
 		if errors.Is(transaction.Error, gorm.ErrRecordNotFound) {
 			return nil, errors.New("invalid username")
 		}

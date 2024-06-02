@@ -77,7 +77,7 @@ make migrate-up
 6. Generate `STATUSPAGE_API_KEY`
 
 ```
-python3 bin/api/generate_api_key.py
+go run bin/api/generate_api_key.go
 ```
 
 7. Paste the generated key into the `.env` file into the `STATUSPAGE_API_KEY` variable
