@@ -25,25 +25,35 @@ fi
 
 # Get the latest tag
 if [[ $ENVIRONMENT == "prod" ]]; then
-    latest_tag=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' | sort -V | tail -n 1)
+    latest_tag=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' | grep -v -- '-alpha' | sort -V | tail -n 1)
 else
-    latest_tag=$(git describe --tags --abbrev=0)
+    latest_tag=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*-alpha' | sort -V | tail -n 1)
 fi
 echo "Latest tag: $latest_tag"
 
-# Extract the version number from the latest tag
-version=$(echo "$latest_tag" | sed -E 's/v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+# Check if latest_tag is empty
+if [[ -z $latest_tag ]]; then
+    major=0
+    minor=0
+    patch=0
+else
+    # Extract the version number from the latest tag
+    version=$(echo "$latest_tag" | sed -E 's/v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
 
-# Split the version into major, minor, and patch
-major=$(echo $version | cut -d. -f1)
-minor=$(echo $version | cut -d. -f2)
-patch=$(echo $version | cut -d. -f3)
+    # Split the version into major, minor, and patch
+    major=$(echo $version | cut -d. -f1)
+    minor=$(echo $version | cut -d. -f2)
+    patch=$(echo $version | cut -d. -f3)
+fi
 
 # Increment the specified version part
 if [[ $INCREMENT == "major" ]]; then
     major=$((major + 1))
+    minor=0
+    patch=0
 elif [[ $INCREMENT == "minor" ]]; then
     minor=$((minor + 1))
+    patch=0
 elif [[ $INCREMENT == "patch" ]]; then
     patch=$((patch + 1))
 fi
