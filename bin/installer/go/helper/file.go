@@ -2,7 +2,7 @@ package helper
 
 import "os"
 
-func CheckIfFileExists(path string) (bool, error) {
+func CheckIfPathExists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
 		return true, nil

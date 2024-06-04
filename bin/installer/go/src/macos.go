@@ -11,7 +11,7 @@ func InstallMacOSUtilities() {
 	commonUtils := []string{"curl", "git", "go"}
 	linterUtils := []string{"golangci-lint", "gosec"}
 	migrationUtils := []string{"goose"}
-
+	log.Println("Checking MacOS utilities...")
 	// Check if Homebrew is installed
 	if !isCommandAvailable("brew") {
 		log.Println("Homebrew is not installed. Installing Homebrew...")
@@ -54,6 +54,7 @@ func InstallMacOSUtilities() {
 		// Open the Docker Desktop download page
 		runCommand("open", "https://hub.docker.com/editions/community/docker-ce-desktop-mac/")
 	}
+	log.Println("MacOS utilities installed successfully.")
 }
 
 func isCommandAvailable(name string) bool {

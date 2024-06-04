@@ -2,24 +2,41 @@ package src
 
 import (
 	"goblitz-installer/helper"
+	"io"
 	"log"
+	"net/http"
 	"os"
 )
 
 func InstallGoBlitz(version string) {
-	exists, err := helper.CheckIfFileExists("GoBlitz")
+	checkFile, err := helper.CheckIfPathExists("GoBlitz")
 	if err != nil {
 		log.Fatalf("Failed to check if GoBlitz directory exists: %s", err)
 	}
-	if !exists {
+
+	if !checkFile {
 		log.Println("GoBlitz directory does not exist. Pulling GoBlitz...")
-		runCommand("git", "config", "--global", "advice.detachedHead", "false")
-		runCommand("git", "clone", "--branch", version, "git@github.com:LookinLabs/GoBlitz.git")
-		os.RemoveAll("GoBlitz/.git")
+		releaseUri := "https://github.com/LookinLabs/GoBlitz/archive/refs/tags/" + version + ".zip"
+
+		uriResponse, err := http.Get(releaseUri)
+		if err != nil {
+			log.Fatalf("Failed to download the zip file: %s", err)
+		}
+
+		defer uriResponse.Body.Close()
+
+		fileOutput, err := os.Create("/tmp/GoBlitz.zip")
+		if err != nil {
+			log.Fatalf("Failed to create the zip file: %s", err)
+		}
+
+		defer fileOutput.Close()
+
+		_, err = io.Copy(fileOutput, uriResponse.Body)
+		if err != nil {
+			log.Fatalf("Failed to write the zip file: %s", err)
+		}
+
 	}
 
-	err = os.WriteFile(".version.txt", []byte(version), 0644)
-	if err != nil {
-		log.Fatalf("Failed to write version to .version.txt: %s", err)
-	}
 }

@@ -29,6 +29,7 @@ func main() {
 	switch {
 	case install && runtime.GOOS == "darwin":
 		src.InstallMacOSUtilities()
+		src.InstallGoBlitz(version)
 	case update && runtime.GOOS == "darwin":
 		// Implement the update functionality here
 	default:
