@@ -1,5 +1,7 @@
 # GoBlitz
 
+> :warning: **Warning:** Archived Project. Please check instead - https://github.com/KostLinux/go-skeleton-app
+
 GoBlitz is a powerful framework built on top of Gin Gonic, designed to help develop production ready web applications in Golang. GoBlitz creates an abstraction layer for the Gin-Gonic framework and provides a structured way to build web applications. It is designed to be fast, secure, and easy to use. The framework is built with security in mind and provides a set of security features to protect web applications from common web vulnerabilities.
 
 Feel free to fork this repository as website boilerplate for your next project.
