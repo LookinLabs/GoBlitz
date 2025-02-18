@@ -3,7 +3,7 @@ module web
 go 1.22.1
 
 require (
-	github.com/gin-contrib/sessions v1.0.1
+	github.com/gin-contrib/sessions v1.0.2
 	github.com/jarcoal/httpmock v1.3.1
 	github.com/stretchr/testify v1.10.0
 	gorm.io/driver/postgres v1.5.11
